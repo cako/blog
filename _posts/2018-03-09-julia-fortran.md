@@ -14,7 +14,7 @@ Super basic example
 ===================
 Let's say you have a function/subroutine Fortran to calculate the dot product. Your file may look something like this:
 
-{{ "{% highlight fortran " }}%}  
+{% highlight fortran %}
 subroutine mul3(n, x, y) bind(c, name="mul3a")
 integer, intent(in) :: n
 real(c_double), dimension(n), intent(in) :: x
@@ -25,7 +25,7 @@ integer :: i
 write(*,*) x(i)*y(i)
     end do
     end subroutine mul3
-{{ "{% endhighlight " }}%}  
+{% endhighlight %}
 
 
 
