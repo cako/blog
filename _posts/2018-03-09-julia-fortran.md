@@ -10,17 +10,16 @@ categories: julia fortran
 The objective of this short tutorial is to get you up to speed with calling Fortran code from Julia in the most painless way possible.
 Most information here has been obtained from the Julia documentation and this [very enlightening discussion](https://groups.google.com/forum/#!topic/julia-users/Hujil3RqWQQ), both of which I highly recommend reading.
 
-Super basic example
-===================
-Let's say you have a function/subroutine Fortran to calculate the dot product. Your file may look something like this:
+# Super basic example
+Let's say you have a function or subroutine Fortran to calculate the dot product. Your file may look something like this:
 
 {% highlight fortran %}
 module basic_example
     contains
 
     real function dot(n, x, y)
-        integer, intent(in) :: n
-        real, dimension(n), intent(in) :: x, y
+        integer :: n
+        real, dimension(n) :: x, y
 
         a = 0.
         do i = 1, n
@@ -30,6 +29,18 @@ module basic_example
     end function dot
 end module basic_example
 {% endhighlight %}
+
+The process of accessing this through Julia is simple, but with a few caveats along the way. The compilation is simple:
+
+{% highlight bash %}
+gfortran basic_example.f95 -o basic_example.so -shared -fPIC
+{% endhighlight %}
+
+As the documentation states, we must ensure that a shared library with position independent code (PIC) is used.  After that, we ideally would be able to call it from Julia with 
+{% highlight julia %}
+ccall((:dot, "./basic_example.so"), ...
+{% endhighlight %}
+Unfortunately that is not the case: one must use Fortran symbol name of the function, which is unlikely to be `dot` as Fortran [generates mangled names](https://en.wikipedia.org/wiki/Name_mangling#Fortran). 
 
 
 
