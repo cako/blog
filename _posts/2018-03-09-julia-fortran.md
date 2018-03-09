@@ -2,7 +2,7 @@
 layout: post
 title:  "Julia and Fortran"
 date:   2018-03-09 16:16:01 -0600
-categories: jekyll update julia fortran
+categories: julia fortran
 ---
 
 [Julia](https:/julialang.org/) is an exciting new language with several interesting capabilities: high-level syntax which resembles MATLAB, high performance, multiple dispatch, etc. One of my favorite features, is its no-nonsense, native approach to calling C and Fortran code. While documentation on C is [widely available online](https://docs.julialang.org/en/stable/manual/calling-c-and-fortran-code/), getting Fortran to work is a bit tricky.
@@ -15,16 +15,20 @@ Super basic example
 Let's say you have a function/subroutine Fortran to calculate the dot product. Your file may look something like this:
 
 {% highlight fortran %}
-subroutine mul3(n, x, y) bind(c, name="mul3a")
-integer, intent(in) :: n
-real(c_double), dimension(n), intent(in) :: x
-real(c_double), dimension(n), intent(out) :: y
-integer :: i
-    do i=1,n
-    y(i) = 3*x(i)
-write(*,*) x(i)*y(i)
-    end do
-    end subroutine mul3
+module basic_example
+    contains
+
+    real function dot(n, x, y)
+        integer, intent(in) :: n
+        real, dimension(n), intent(in) :: x, y
+
+        a = 0.
+        do i = 1, n
+           a = x(i)*y(i) 
+        end do
+        dot = a
+    end function dot
+end module basic_example
 {% endhighlight %}
 
 
