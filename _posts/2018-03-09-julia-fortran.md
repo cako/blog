@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Julia and Fortran!"
+title:  "Julia and Fortran"
 date:   2018-03-09 16:16:01 -0600
 categories: jekyll update julia fortran
 ---
