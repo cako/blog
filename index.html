@@ -1,12 +1,29 @@
 ---
 layout: default
 ---
+<head>
+    <title>Carlos' blog</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <link rel="stylesheet" href="https://cdacosta-londonbucket.s3.eu-west-2.amazonaws.com:443/mainsite/assets/css/csso-main.css" />
+    <link rel="icon" href="https://cdacosta-londonbucket.s3.eu-west-2.amazonaws.com:443/mainsite/images/avatar.ico" type="image/x-icon" />
+
+    <meta property="og:title" content="Carlos' blog" />
+    <meta property="og:url" content="https://cako.github.io/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:description" content="My blog"/>
+</head>
+
+<h1>Welcome</h1>
+Hi, welcome to my blog. I am applied Earth scientist with interests in seismic imaging and inversion. You can read a bit more about my academic work on [my website](https://carloscosta.herokuapp.com).
+
+<h2>Posts</h2>
 <div class="posts">
     {% for post in site.posts %}
     <article class="post">
 
-        <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
+        <h2><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h2>
 
         <div class="entry">
             {{ post.excerpt }}
