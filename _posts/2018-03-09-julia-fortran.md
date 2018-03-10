@@ -184,7 +184,7 @@ A table with the summary of results can be found below:
 |                | Native Fortran |          | Julia Fortran |          | Native Julia |          |        |
 |---------------:|:--------------:|:--------:|:-------------:|:--------:|:------------:|:--------:|:------:|
 |                |     Serial     | Parallel |     Serial    | Parallel |    Serial    | Parallel | Native |
-|        Time (s)|    0.25600     | 0.28400  |    0.28244    | 0.23902  |    3.37653   | 4.18478  | 0.03095|
-| Rel. Speed  (x)|       8.3      |   9.2    |      9.1      |    7.7   |    109.0     |   35.2   |  1.0   |
+|        Time (s)|      0.256     |   0.28   |      0.28     |   0.24   |      3.38    |    4.18  |  0.03  |
+| Rel. Speed  (x)|      8.3       |   9.2    |      9.1      |   7.7    |    109.0     |   35.2   |  1.0   |
 
-
+Let's ignore the elephant in the room — native Julia seems faster than Fortran — for a second. 
