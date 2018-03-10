@@ -16,13 +16,13 @@ layout: default
 
 <h1>Welcome</h1>
 Hi, welcome to my blog. I am applied Earth scientist with interests in seismic imaging and inversion. You can read a bit more about my academic work on [my website](https://carloscosta.herokuapp.com).
+
 <span class="author"><i class="icon-user"></i>— <a href="https://carloscosta.heroukapp.com">{% if page.author %}{{page.author}}{% else %}{{site.author}}{% endif%}</a></span>
 
-<h2>Posts</h2>
+<h1>Posts</h1>
 <div class="posts">
     {% for post in site.posts %}
     <article class="post">
-
         <h2><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h2>
 
         <div class="entry">
@@ -32,5 +32,4 @@ Hi, welcome to my blog. I am applied Earth scientist with interests in seismic i
         <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>
     </article>
     {% endfor %}
-
 </div>
