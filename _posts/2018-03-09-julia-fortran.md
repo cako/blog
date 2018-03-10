@@ -119,3 +119,72 @@ ccall((:better_dot, "./better_example.so"),
 {% endhighlight %}
 
 We will be using now `Cdouble`s and `Cint`s to make it clear that we are interoperable. Our `ccall` also looks a bit different: our return is now `Void`, and instead we are passing `a` as the container for our return. After running the code above, `a` will become `[10.0]`. Note the use of `NaN` in its first declaration: this helps us debug a faulty `ccall`.
+
+# Benchmarks
+
+Now that we know how to call Fortran code from Julia, let's do run some benchmarks. These are meant to be merely illustrative, and they are *not* rigorous benchmarks.
+
+The Fortran functions can be found below.
+
+{% highlight fortran %}
+module dot_prod
+    use, intrinsic :: iso_c_binding
+    implicit none
+    contains
+
+    real(c_double) function sdot(n, x, y) bind(c, name="sdot")
+        integer(c_int), intent(in) :: n
+        real(c_double), dimension(n), intent(in) :: x, y
+        integer(c_int) :: i
+        real(c_double) :: a
+        a = 0.
+        do i=1, n
+            a  = a + x(i)*y(i)
+        end do
+        sdot = a
+    end function sdot
+
+    real(c_double) function pdot(n, x, y) bind(c, name="pdot")
+        integer(c_int), intent(in) :: n
+        real(c_double), dimension(n), intent(in) :: x, y
+        integer(c_int) :: i
+        real(c_double) :: a
+        a = 0.
+        !$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(i,n) REDUCTION(+:a)
+        do i=1, n
+            a  = a + x(i)*y(i)
+        end do
+        !$OMP END PARALLEL DO
+        pdot = a
+    end function pdot
+end module dot_prod
+{% endhighlight %}
+                    
+These functions were compiled to a standard Fortran binary (`-O3 -fopenmp`), to be our native Fortran baseline. The full benchmarking code can be found [here](code). They were also compiled to a library to be called from Julia. Finally, I also benchmarked the native dot product, as well as naive serial and idiomatic parallel implementations which can be respectively found below. The full Julia benchmark code can be found [here](repo).
+
+{% highlight julia %}
+function sdot(n, x, y)
+    a = 0
+    for i=1:n[]
+        a += x[i]*y[i]
+    end
+    a
+end
+
+function pdot(n, x, y)
+    @parallel (+) for i=1:n[]
+        x[i]*y[i]
+    end
+end
+{% endhighlight %}
+
+A table with the summary of results can be found below:
+
+
+|                | Native Fortran |          | Julia Fortran |          | Native Julia |          |        |
+|---------------:|:--------------:|:--------:|:-------------:|:--------:|:------------:|:--------:|:------:|
+|                |     Serial     | Parallel |     Serial    | Parallel |    Serial    | Parallel | Native |
+|        Time (s)|    0.256000    | 0.284000 |    0.282436   | 0.239021 |   3.376530   | 4.184777 |0.030952|
+| Rel. Speed  (x)|       8.3      |   9.2    |      9.1      |    7.7   |    109.0     |   35.2   |  1.0   |
+
+
