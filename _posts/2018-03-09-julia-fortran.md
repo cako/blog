@@ -11,7 +11,7 @@ But while [examples for C abound](https://docs.julialang.org/en/stable/manual/ca
 
 The objective of this short tutorial is to get you up to speed with calling Fortran code from Julia in the most painless way possible.
 Most information here has been obtained from the Julia documentation and this [very enlightening discussion](https://groups.google.com/forum/#!topic/julia-users/Hujil3RqWQQ), both of which I highly recommend reading.
-If you want to skip the read and just grab the codes, head to [here](https://github.com/cako/cako.github.io/tree/master/codes/2018-03-09-julia-fortran).
+If you want to skip the read and just grab the codes, head [here](https://github.com/cako/cako.github.io/tree/master/codes/2018-03-09-julia-fortran).
 
 #### Super basic example
 Let's say you have a Fortran `function` or `subroutine` to calculate the dot product.
