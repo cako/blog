@@ -5,7 +5,7 @@ date:   2018-03-10
 categories: julia fortran
 ---
 
-[Julia](https:/julialang.org/) is an exciting new language with several interesting capabilities: high-level syntax which resembles MATLAB, high performance, multiple dispatch, etc.
+[Julia](https://julialang.org/) is an exciting new language with several interesting capabilities: high-level syntax which resembles MATLAB, high performance, multiple dispatch, etc.
 One of my favorite features, is its no-nonsense, no-boilerplate approach to calling C and Fortran code.
 But while [examples for C abound](https://docs.julialang.org/en/stable/manual/calling-c-and-fortran-code/), Fortran information is scarcer.
 
