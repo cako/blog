@@ -103,6 +103,8 @@ end module better_example
 
 The first difference we notice is the use of [`iso_c_binding`](https://gcc.gnu.org/onlinedocs/gfortran/ISO_005fC_005fBINDING.html). This creates named constants which are equivalent to their C types. In  multilanguage setting, it sets a standard dialect to be spoken by all. The second difference is the use of `bind` after the `subroutine` definition. This ensures that the `subroutine` can be accessed by C functions. Conveniently, it also means that we can name the structure without the standard mangling. I chose to call it `better_dot`, but omitting `name=` in this case would just result in `dot`.
 
+This time, I chose to use a `subroutine` as opposed to a `function`. In this case the output value has to be placed in the input variable `a`. This will affect how we write the associated `ccall`.
+
 We compile the code similarly as before, but now our Julia code will look like this:
 
 {% highlight julia %}
