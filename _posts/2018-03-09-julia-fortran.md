@@ -67,21 +67,22 @@ y = Float32[1,1,1,1]
 n = Int32[4]
 {% endhighlight %}
 
-The arrays are straightforward; this is how one usually allocate arrays. This is because the Fortran `ccall` demands passing references (or pointers) which is fine for arrays, as they are passed by reference. An integer variable, on the other hand, is not bound to the reference of the variable, but to the value itself. Therefore, to make our lives easier, we will just encase it within an `Int32` array. With all that in mind, our `ccall` will look like:
+The arrays are straightforward; this is how one usually allocate arrays. This is because the Fortran `ccall` demands passing references (or pointers) which is fine for arrays, as they are passed by reference. An integer variable, on the other hand, is not bound to the reference of the variable, but to the value itself. Therefore, to make our lives easier, we will just encase it within an `Int32` array. With all that in mind, our `ccall` will finally look like:
 
 {% highlight julia %}
 ccall((:__basic_example_MOD_dot, "./basic_example.so"),
       Float32,
-      (Ref{Int32}, Ref{Float32}, Ref{Float32}), n, x, y)
+      (Ref{Int32}, Ref{Float32}, Ref{Float32}),
+      n, x, y)
 {% endhighlight %}
 
 This should return `10.0`.
 
 # Slightly better example
 
-If your Fortran code is part of a well established library, especially one which interacts with other languages, it is possible that your code uses C bindings. Alternatively, you have some pull on how the code is written and you can add that yourself. In this case, the following code pattern essentially works for me.
+If your Fortran code is part of a well established library, especially one which interacts with other languages, it is possible that your code uses C bindings. Alternatively, you may have some pull on how the code is written and you can add that yourself. In these cases, the following code pattern works for me:
 
-{% highlight julia %}
+{% highlight fortran %}
 module better_example
     use, intrinsic :: iso_c_binding
     implicit none
@@ -101,3 +102,18 @@ end module better_example
 {% endhighlight %}
 
 The first difference we notice is the use of [`iso_c_binding`](https://gcc.gnu.org/onlinedocs/gfortran/ISO_005fC_005fBINDING.html). This creates named constants which are equivalent to their C types. In  multilanguage setting, it sets a standard dialect to be spoken by all. The second difference is the use of `bind` after the `subroutine` definition. This ensures that the `subroutine` can be accessed by C functions. Conveniently, it also means that we can name the structure without the standard mangling. I chose to call it `better_dot`, but omitting `name=` in this case would just result in `dot`.
+
+We compile the code similarly as before, but now our Julia code will look like this:
+
+{% highlight julia %}
+x = Cdouble[1,2,3,4]
+y = Cdouble[1,1,1,1]
+n = Cint[4]
+a = Cdouble[NaN]
+ccall((:better_dot, "./better_example.so"),
+      Void,
+      (Ref{Cint}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
+      n, x, y, a)
+{% endhighlight %}
+
+We will be using now `Cdouble`s and `Cint`s to make it clear that we are interoperable. Our `ccall` also looks a bit different: our return is now `Void`, and instead we are passing `a` as the container for our return. After running the code above, `a` will become `[10.0]`. Note the use of `NaN` in its first declaration: this helps us debug a faulty `ccall`.
