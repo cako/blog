@@ -4,15 +4,14 @@ layout: default
 
 <article>
         <header>
-            <h2>{{ page.title }}</h2>
+            <h1>{{ page.title }}</h1>
             <span><i class="icon-clock"></i><time datetime="{{page.date|date:"%F"}}">{{page.date|date:"%b %d, %Y"}}</time></span><br/>
-            <span class="category"><i class="icon-tag"></i><a href=/categories/">Tags</a>: {{ page.categories | join:' | ' }}</span><br/>
-            <span class="author"><i class="icon-user"></i> {% if page.author %}{{page.author}}{% else %}{{site.author}}{% endif%}</span>
+            <span class="category"><i class="icon-tag"></i><a href=/categories/">Tags</a>: {{ page.categories | join:', ' }}</span><br/>
         </header>
-
+        <br>
         <div class="entry">{{ content }}</div>
 
-        <footer><!-- additional info --></footer>
+        <footer><span class="author"><i class="icon-user"></i> {% if page.author %}{{page.author}}{% else %}{{site.author}}{% endif%}</span></footer>
 
 </article>
 
