@@ -5,12 +5,12 @@ date:   2018-03-09 16:16:01 -0600
 categories: julia fortran
 ---
 
-[Julia](https:/julialang.org/) is an exciting new language with several interesting capabilities: high-level syntax which resembles MATLAB, high performance, multiple dispatch, etc. One of my favorite features, is its no-nonsense, native approach to calling C and Fortran code. While documentation on C is [widely available online](https://docs.julialang.org/en/stable/manual/calling-c-and-fortran-code/), getting Fortran to work is a bit tricky.
+[Julia](https:/julialang.org/) is an exciting new language with several interesting capabilities: high-level syntax which resembles MATLAB, high performance, multiple dispatch, etc. One of my favorite features, is its no-nonsense, no-boilerplate approach to calling C and Fortran code. While documentation on C is [widely available online](https://docs.julialang.org/en/stable/manual/calling-c-and-fortran-code/), getting Fortran to work is a bit tricky.
 
 The objective of this short tutorial is to get you up to speed with calling Fortran code from Julia in the most painless way possible.
 Most information here has been obtained from the Julia documentation and this [very enlightening discussion](https://groups.google.com/forum/#!topic/julia-users/Hujil3RqWQQ), both of which I highly recommend reading.
 
-## Super basic example
+#### Super basic example
 Let's say you have a function or subroutine Fortran to calculate the dot product. Your file may look something like this:
 
 {% highlight fortran %}
@@ -78,7 +78,7 @@ ccall((:__basic_example_MOD_dot, "./basic_example.so"),
 
 This should return `10.0`.
 
-### Slightly better example
+#### Slightly better example
 
 If your Fortran code is part of a well established library, especially one which interacts with other languages, it is possible that your code uses C bindings. Alternatively, you may have some pull on how the code is written and you can add that yourself. In these cases, the following code pattern works for me:
 
@@ -200,6 +200,6 @@ end
 
 So in reality, Julia is really fast because it is relying on special Fortran libraries to do the dirty work.
 
-# Conclusions and pitfalls
+#### Conclusions and pitfalls
 I hope this post has been able to convince you that using Fortran from Julia is not only easy, it is fast both in termsof implementation and in terms of computational.
 It is also important to notice that even though using Fortran is attractive from a performance perspective, native Julia (through standard libraries) can be just as fast. Therefore, before you decide to start writing new Fortran code, it might be wise to investigate whether it is possible to reduce the problem to functions in the standard library.

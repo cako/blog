@@ -2,3 +2,8 @@ theme: jekyll-theme-cayman
 
 title: Carlos' blog
 description: Geophysics, math and coding
+author: Carlos Alberto da Costa Filho
+url: https://cako.github.io
+
+permalink: pretty
+
