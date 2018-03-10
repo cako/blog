@@ -185,6 +185,21 @@ A table with the summary of results can be found below:
 |---------------:|:--------------:|:--------:|:-------------:|:--------:|:------------:|:--------:|:------:|
 |                |     Serial     | Parallel |     Serial    | Parallel |    Serial    | Parallel | Native |
 |        Time (s)|      0.256     |   0.28   |      0.28     |   0.24   |      3.38    |    4.18  |  0.03  |
-| Rel. Speed  (x)|      8.3       |   9.2    |      9.1      |   7.7    |    109.0     |   35.2   |  1.0   |
+| Rel. Speed  (x)|      8.3       |   9.2    |      9.1      |   7.7    |    109.0     |   135.2  |  1.0   |
 
-Let's ignore the elephant in the room — native Julia seems faster than Fortran — for a second. 
+Let's ignore the elephant in the room — native Julia seems faster than Fortran — for a second. If we compare native Julia and Fortran through Julia, we see almost no difference in times. The `ccall` overhead appears to be minimal. In addition, if we compare both of these to native, naive, Julia implementations, they are about an order of magnitude faster, which is consistent with standard Julia benchmarks. Finally, the reason why the native Julia implementation is so darn fast is because in reality, it relies on BLAS. The code for it can be found in the standard library. A (slightly adapted) version can be found below:
+
+{% highlight julia %}
+function dot(n::Integer, DX::Union{Ptr{Float64},DenseArray{Float64}}, incx::Integer,
+                         DY::Union{Ptr{Float64},DenseArray{Float64}}, incy::Integer)
+    ccall((@blasfunc(:ddot_), libblas), Float64,
+          (Ptr{BlasInt}, Ptr{Float64}, Ptr{BlasInt}, Ptr{Float64}, Ptr{BlasInt}),
+          &n, DX, &incx, DY, &incy)
+end
+{% endhighlight %}
+
+So in reality, Julia is really fast because it is relying on special Fortran libraries to do the dirty work.
+
+# Conclusions and pitfalls
+I hope this post has been able to convince you that using Fortran from Julia is not only easy, it is fast both in termsof implementation and in terms of computational.
+It is also important to notice that even though using Fortran is attractive from a performance perspective, native Julia (through standard libraries) can be just as fast. Therefore, before you decide to start writing new Fortran code, it might be wise to investigate whether it is possible to reduce the problem to functions in the standard library.
