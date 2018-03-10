@@ -1,17 +1,21 @@
 ---
 layout: post
 title:  "Julia and Fortran"
-date:   2018-03-09 16:16:01 -0600
+date:   2018-03-10
 categories: julia fortran
 ---
 
-[Julia](https:/julialang.org/) is an exciting new language with several interesting capabilities: high-level syntax which resembles MATLAB, high performance, multiple dispatch, etc. One of my favorite features, is its no-nonsense, no-boilerplate approach to calling C and Fortran code. While documentation on C is [widely available online](https://docs.julialang.org/en/stable/manual/calling-c-and-fortran-code/), getting Fortran to work is a bit tricky.
+[Julia](https:/julialang.org/) is an exciting new language with several interesting capabilities: high-level syntax which resembles MATLAB, high performance, multiple dispatch, etc.
+One of my favorite features, is its no-nonsense, no-boilerplate approach to calling C and Fortran code.
+But while [examples for C abound](https://docs.julialang.org/en/stable/manual/calling-c-and-fortran-code/), Fortran information is scarcer.
 
 The objective of this short tutorial is to get you up to speed with calling Fortran code from Julia in the most painless way possible.
 Most information here has been obtained from the Julia documentation and this [very enlightening discussion](https://groups.google.com/forum/#!topic/julia-users/Hujil3RqWQQ), both of which I highly recommend reading.
+If you want to skip the read and just grab the codes, head to [here](https://github.com/cako/cako.github.io/tree/master/codes/2018-03-09-julia-fortran).
 
 #### Super basic example
-Let's say you have a function or subroutine Fortran to calculate the dot product. Your file may look something like this:
+Let's say you have a Fortran `function` or `subroutine` to calculate the dot product.
+Your file may look something like this:
 
 {% highlight fortran %}
 module basic_example
@@ -30,27 +34,39 @@ module basic_example
 end module basic_example
 {% endhighlight %}
 
-The process of accessing this through Julia is simple, but with a few caveats along the way. The compilation is simple:
+The process of accessing this through Julia is simple, but with a few caveats along the way.
+The compilation is simple:
 
 {% highlight bash %}
 gfortran basic_example.f95 -o basic_example.so -shared -fPIC
 {% endhighlight %}
 
-As the documentation states, we must ensure that a shared library with position-independent code ([PIC](https://en.wikipedia.org/wiki/Position-independent_code)) is used.  After that, we ideally would be able to call it from Julia with 
+As the documentation states, we must ensure that a shared library with position-independent code ([PIC](https://en.wikipedia.org/wiki/Position-independent_code)) is used.
+Mimicking C, we ideally would be able to call it from Julia with 
 
 {% highlight julia %}
 ccall((:dot, "./basic_example.so"), ...
 {% endhighlight %}
 
-Unfortunately that is not the case: one must use the Fortran symbol name of the function, which is unlikely to be `dot` as Fortran [generates mangled names](https://en.wikipedia.org/wiki/Name_mangling#Fortran). In order to address that we must find the symbol name. A quick way to do that in Linux is to use the [`nm`](https://en.wikipedia.org/wiki/Nm_\(Unix\)) command, which lists the names of symbols in a binary:
+This will not work, and we've hit our first snag.
+One must use the Fortran symbol name of the function, which is unlikely to be `dot` as Fortran [generates mangled names](https://en.wikipedia.org/wiki/Name_mangling#Fortran).
+In order to address that we must find the symbol name.
+A quick way to do that in Linux is to use the [`nm` command](https://en.wikipedia.org/wiki/Nm_\(Unix\)), which lists the names of symbols in a binary:
 
 {% highlight bash %}
 nm basic_example.so | grep dot
 {% endhighlight %}
 
-On my machine this returns `__basic_example_MOD_dot`, which is the name which should be used in the `ccall`. In the next example we will see how we can bypass name mangling.
+On my machine this returns `__basic_example_MOD_dot`, which is the name which should be used in the `ccall`.
+In the next example we will see how we can bypass name mangling.
 
-Now we have to worry about variable types. The output is `real` and the inputs are: single `integer`, two `real` arrays. C has system independent `float`s which are nicely matched to Julia types such as `Float32` or its alias `Cfloat`. In Fortran that is not the case, our Fortran `real` most likely means `real*4`, which is equivalent to `Float32`, but we cannot be 100% sure, as it is architechture and compile dependent and could be for example `real*8`. The same goes for `integer` which most likely means `integer*4`, but can also mean `integer*2`. For now, we will just assume that `real` is a `Float32` and `integer` is an `Int32`. Our `dot` function should then read
+Now we have to worry about variable types.
+The output is `real` and the inputs are: single `integer`, two `real` arrays.
+C has system independent `float`s which are nicely matched to Julia types such as `Float32` or its alias `Cfloat`.
+In Fortran that is not the case, our Fortran `real` most likely means `real*4`, which is equivalent to `Float32`, but we cannot be 100% sure, as it is architechture- and compiler-dependent, and could be `real*8`, for example.
+The same goes for `integer` which most likely means `integer*4`, but can also mean `integer*2`.
+For now, we will just assume that `real` is a `Float32` and `integer` is an `Int32`.
+Our `dot` function should then read
 
 {% highlight julia %}
 ccall((:__basic_example_MOD_dot, "./basic_example.so"),
@@ -59,7 +75,8 @@ ccall((:__basic_example_MOD_dot, "./basic_example.so"),
       ...
 {% endhighlight %}
 
-As per advised by the documentation, we should pass `Ref`s when the memory is allocated by Julia (our case), as opposed to `Ptr` when it is allocated by the other language. We are now nearly there and all we have to do is create some input and pass that to the `ccall`:
+As per advised by the documentation, we should pass `Ref`s when the memory is allocated by Julia (our case), as opposed to `Ptr` when it is allocated by the other language.
+We are nearly there, and all we have to do is create some input and pass that to the `ccall`:
 
 {% highlight julia %}
 x = Float32[1,2,3,4]
@@ -67,7 +84,11 @@ y = Float32[1,1,1,1]
 n = Int32[4]
 {% endhighlight %}
 
-The arrays are straightforward; this is how one usually allocate arrays. This is because the Fortran `ccall` demands passing references (or pointers) which is fine for arrays, as they are passed by reference. An integer variable, on the other hand, is not bound to the reference of the variable, but to the value itself. Therefore, to make our lives easier, we will just encase it within an `Int32` array. With all that in mind, our `ccall` will finally look like:
+The arrays are straightforward; this is how one usually allocate arrays.
+**Fortran `ccall` demands passing references (or pointers)** which is fine for arrays, as they are passed by reference.
+An integer variable, on the other hand, is not bound to its reference, but rather to the value itself.
+Therefore, to make our lives easier, we will just encase it within an `Int32` array.
+With all that in mind, our `ccall` will finally look like:
 
 {% highlight julia %}
 ccall((:__basic_example_MOD_dot, "./basic_example.so"),
@@ -80,7 +101,9 @@ This should return `10.0`.
 
 #### Slightly better example
 
-If your Fortran code is part of a well established library, especially one which interacts with other languages, it is possible that your code uses C bindings. Alternatively, you may have some pull on how the code is written and you can add that yourself. In these cases, the following code pattern works for me:
+If your Fortran code is part of a well established library, especially one which interacts with other languages, it is possible that your code uses C bindings.
+Alternatively, you may have some pull on how the code is written and you can add that yourself.
+In these cases, you might come across a similar code pattern:
 
 {% highlight fortran %}
 module better_example
@@ -89,10 +112,10 @@ module better_example
     contains
 
     subroutine dot(n, x, y, a) bind(c, name="better_dot")
-        integer, intent(in) :: n
+        integer(c_int), intent(in) :: n
         real(c_double), dimension(n), intent(in) :: x, y
         real(c_double), intent (out) :: a
-        integer :: i
+        integer(c_int) :: i
         a = 0.
         do i=1, n
             a  = a + x(i)*y(i)
@@ -101,9 +124,18 @@ module better_example
 end module better_example
 {% endhighlight %}
 
-The first difference we notice is the use of [`iso_c_binding`](https://gcc.gnu.org/onlinedocs/gfortran/ISO_005fC_005fBINDING.html). This creates named constants which are equivalent to their C types. In  multilanguage setting, it sets a standard dialect to be spoken by all. The second difference is the use of `bind` after the `subroutine` definition. This ensures that the `subroutine` can be accessed by C functions. Conveniently, it also means that we can name the structure without the standard mangling. I chose to call it `better_dot`, but omitting `name=` in this case would just result in `dot`.
+The first difference we notice is the use of `iso_c_binding`.
+This creates named constants which are equivalent to their C types (see [here](https://gcc.gnu.org/onlinedocs/gfortran/ISO_005fC_005fBINDING.html)).
+In a multilanguage setting, it sets a standard dialect to be spoken by all.
 
-This time, I chose to use a `subroutine` as opposed to a `function`. In this case the output value has to be placed in the input variable `a`. This will affect how we write the associated `ccall`.
+The second difference is the use of `bind` after the `subroutine` definition.
+This ensures that the `subroutine` can be accessed by C functions.
+Conveniently, it also means that we can name the structure without the standard mangling.
+I chose to call it `better_dot`, but omitting `name=` in this case would just result in `dot`.
+
+Finally, this time I chose to use a `subroutine` as opposed to a `function`.
+In this case the output value has to be placed in the input variable `a`.
+This will affect how we write the associated `ccall`.
 
 We compile the code similarly as before, but now our Julia code will look like this:
 
@@ -118,11 +150,15 @@ ccall((:better_dot, "./better_example.so"),
       n, x, y, a)
 {% endhighlight %}
 
-We will be using now `Cdouble`s and `Cint`s to make it clear that we are interoperable. Our `ccall` also looks a bit different: our return is now `Void`, and instead we are passing `a` as the container for our return. After running the code above, `a` will become `[10.0]`. Note the use of `NaN` in its first declaration: this helps us debug a faulty `ccall`.
+We will be using now `Cdouble`s and `Cint`s to make it clear that we are interoperable.
+Our `ccall` also looks a bit different: our return is now `Void`, and instead we are passing `a` as the container for our return.
+After running the code above, `a` will become `[10.0]`.
+Note the use of `NaN` in its first declaration: this helps us debug a faulty `ccall`.
 
 #### Benchmarks
 
-Now that we know how to call Fortran code from Julia, let's do run some benchmarks. These are meant to be merely illustrative, and they are *not* rigorous benchmarks.
+Now that we know how to call Fortran code from Julia, let's run some benchmarks.
+These are meant to be merely illustrative, and they are *not* rigorous benchmarks.
 
 The Fortran functions can be found below.
 
@@ -160,7 +196,11 @@ module dot_prod
 end module dot_prod
 {% endhighlight %}
                     
-These functions were compiled to a standard Fortran binary (`-O3 -fopenmp`), to be our native Fortran baseline. The full benchmarking code can be found [here](code). They were also compiled to a library to be called from Julia. Finally, I also benchmarked the native dot product, as well as naive serial and idiomatic parallel implementations which can be respectively found below. The full Julia benchmark code can be found [here](repo).
+These functions were compiled to a standard Fortran binary (`-O3 -fopenmp`), to be our native Fortran comparison.
+The full benchmarking code can be found [here](https://github.com/cako/cako.github.io/blob/master/codes/2018-03-09-julia-fortran/bench_example.f95).
+They were also compiled to a library to be called from Julia.
+Finally, I also benchmarked the native dot product, as well as naive serial and idiomatic parallel implementations which can be respectively found below.
+The full Julia benchmark code can be found [here](https://github.com/cako/cako.github.io/blob/master/codes/2018-03-09-julia-fortran/bench_example.jl).
 
 {% highlight julia %}
 function sdot(n, x, y)
@@ -178,16 +218,23 @@ function pdot(n, x, y)
 end
 {% endhighlight %}
 
-A table with the summary of results can be found below:
+A table with the summary of results can be found below (run with `julia -p 2`):
 
 
 |           | Native Fortran |          | Julia Fortran |          | Native Julia |          |        |
 |----------:|:--------------:|:--------:|:-------------:|:--------:|:------------:|:--------:|:------:|
 |           |     Serial     | Parallel |     Serial    | Parallel |    Serial    | Parallel | Native |
-|   Time (s)|      0.256     |   0.28   |      0.28     |   0.24   |      3.38    |    4.18  |  0.03  |
+|   Time (s)|      0.26      |   0.28   |      0.28     |   0.24   |      3.38    |    4.18  |  0.03  |
 | Speed  (x)|      8.3       |   9.2    |      9.1      |   7.7    |    109.0     |   135.2  |  1.0   |
 
-Let's ignore the elephant in the room — native Julia seems faster than Fortran — for a second. If we compare native Julia and Fortran through Julia, we see almost no difference in times. The `ccall` overhead appears to be minimal. In addition, if we compare both of these to native, naive, Julia implementations, they are about an order of magnitude faster, which is consistent with standard Julia benchmarks. Finally, the reason why the native Julia implementation is so darn fast is because in reality, it relies on BLAS. The code for it can be found in the standard library. A (slightly adapted) version can be found below:
+Let's ignore the elephant in the room — native Julia seems faster than Fortran — for a second.
+If we compare native Fortran and Fortran through Julia, we see almost no difference in times.
+The `ccall` overhead appears to be minimal.
+In addition, if we compare both of these to native, naive, Julia implementations, they are about an order of magnitude faster, which is consistent with standard Julia benchmarks.
+
+With this said, the reason why the native Julia implementation is so darn fast is because in reality, it relies on BLAS.
+The code for it can be found in the standard library.
+A (slightly adapted) version can be found below:
 
 {% highlight julia %}
 function dot(n::Integer, DX::Union{Ptr{Float64},DenseArray{Float64}}, incx::Integer,
@@ -198,8 +245,12 @@ function dot(n::Integer, DX::Union{Ptr{Float64},DenseArray{Float64}}, incx::Inte
 end
 {% endhighlight %}
 
-So in reality, Julia is really fast because it is relying on special Fortran libraries to do the dirty work.
+In this case, Julia is really fast because it is relying on special Fortran libraries to do the dirty work.
 
-#### Conclusions and pitfalls
-I hope this post has been able to convince you that using Fortran from Julia is not only easy, it is fast both in termsof implementation and in terms of computational.
-It is also important to notice that even though using Fortran is attractive from a performance perspective, native Julia (through standard libraries) can be just as fast. Therefore, before you decide to start writing new Fortran code, it might be wise to investigate whether it is possible to reduce the problem to functions in the standard library.
+#### Conclusions
+I hope this post has been able to convince you that using Fortran from Julia is not only easy, it is fast both in terms of implementation and in terms of computation.
+It is also important to notice that even though using Fortran is attractive from a performance perspective, native Julia (through standard libraries) can be just as fast.
+Therefore, before you decide to start writing new Fortran code, it might be wise to investigate whether it is possible to reduce the problem to functions in the standard library.
+
+In this post, I limited myself to a very simplistic scenario where I am passing unidimensional arrays created in Julia, along with their size to a Fortran function.
+In the next post I will explore some dangers, limitations and possible mitigation strategies when dealing with more complex code patterns.

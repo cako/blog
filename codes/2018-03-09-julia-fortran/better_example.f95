@@ -7,7 +7,7 @@ module better_example
         integer(c_int), intent(in) :: n
         real(c_double), dimension(n), intent(in) :: x, y
         real(c_double), intent (out) :: a
-        integer :: i
+        integer(c_int) :: i
         a = 0.
         do i=1, n
             a  = a + x(i)*y(i)
