@@ -42,7 +42,7 @@ As the documentation states, we must ensure that a shared library with position-
 ccall((:dot, "./basic_example.so"), ...
 {% endhighlight %}
 
-Unfortunately that is not the case: one must use Fortran symbol name of the function, which is unlikely to be `dot` as Fortran [generates mangled names](https://en.wikipedia.org/wiki/Name_mangling#Fortran). In order to address that we must find the symbol name. A quick way to do that in Linux is to use the `nm` command, which lists the names of symbols in a library:
+Unfortunately that is not the case: one must use the Fortran symbol name of the function, which is unlikely to be `dot` as Fortran [generates mangled names](https://en.wikipedia.org/wiki/Name_mangling#Fortran). In order to address that we must find the symbol name. A quick way to do that in Linux is to use the [`nm`](https://en.wikipedia.org/wiki/Nm_\(Unix\)) command, which lists the names of symbols in a binary:
 
 {% highlight bash %}
 nm basic_example.so | grep dot
@@ -50,10 +50,13 @@ nm basic_example.so | grep dot
 
 On my machine this returns `__basic_example_MOD_dot`, which is the name which should be used in the `ccall`. In the next example we will see how we can bypass name mangling.
 
-Now we have to worry about variable types. The output is `real` and the inputs are: single `integer`, two `real` arrays. C has system independent `float`s which are nicely matched to Julia types such as `Float32` or its alias `Cfloat`. In Fortran that is not the case, our Fortran `real` most likely means `real*4`, which is equivalent to `Float32`, but we cannot be 100% sure, as it is architechture and compile dependent and could be for example `real*8`. The same goes for `integer` which most likely means `integer*4`, but can also mean `integer*2`. For now, we will just assume that `real` is a `Float32` and `integer` is an `Int32`. Our `dot` function should then real
+Now we have to worry about variable types. The output is `real` and the inputs are: single `integer`, two `real` arrays. C has system independent `float`s which are nicely matched to Julia types such as `Float32` or its alias `Cfloat`. In Fortran that is not the case, our Fortran `real` most likely means `real*4`, which is equivalent to `Float32`, but we cannot be 100% sure, as it is architechture and compile dependent and could be for example `real*8`. The same goes for `integer` which most likely means `integer*4`, but can also mean `integer*2`. For now, we will just assume that `real` is a `Float32` and `integer` is an `Int32`. Our `dot` function should then read
 
 {% highlight julia %}
-ccall((:__basic_example_MOD_dot, "./basic_example.so"), Float32, (Ref{Int32}, Ref{Float32}, Ref{Float32}), ...
+ccall((:__basic_example_MOD_dot, "./basic_example.so"),
+      Float32,
+      (Ref{Int32}, Ref{Float32}, Ref{Float32}),
+      ...
 {% endhighlight %}
 
 As per advised by the documentation, we should pass `Ref`s when the memory is allocated by Julia (our case), as opposed to `Ptr` when it is allocated by the other language. We are now nearly there and all we have to do is create some input and pass that to the `ccall`:
@@ -64,10 +67,12 @@ y = Float32[1,1,1,1]
 n = Int32[4]
 {% endhighlight %}
 
-The arrays are straightforward, this is how you usually allocate arrays. This is because the Fortran `ccall` demands passing references (or pointers) which is fine for arrays, because they are passed by reference. An integer variable, on the other hand, is not bound to the reference of the variable, but to the value itself. Therefore, to make our lives easier, we will just encase it within an `Int32` array. With all that in mind, our `ccall` will look like:
+The arrays are straightforward; this is how one usually allocate arrays. This is because the Fortran `ccall` demands passing references (or pointers) which is fine for arrays, as they are passed by reference. An integer variable, on the other hand, is not bound to the reference of the variable, but to the value itself. Therefore, to make our lives easier, we will just encase it within an `Int32` array. With all that in mind, our `ccall` will look like:
 
 {% highlight julia %}
-ccall((:__basic_example_MOD_dot, "./basic_example.so"), Float32, (Ref{Int32}, Ref{Float32}, Ref{Float32}), n, x, y)
+ccall((:__basic_example_MOD_dot, "./basic_example.so"),
+      Float32,
+      (Ref{Int32}, Ref{Float32}, Ref{Float32}), n, x, y)
 {% endhighlight %}
 
 This should return `10.0`.
