@@ -10,7 +10,7 @@ categories: julia fortran
 The objective of this short tutorial is to get you up to speed with calling Fortran code from Julia in the most painless way possible.
 Most information here has been obtained from the Julia documentation and this [very enlightening discussion](https://groups.google.com/forum/#!topic/julia-users/Hujil3RqWQQ), both of which I highly recommend reading.
 
-# Super basic example
+## Super basic example
 Let's say you have a function or subroutine Fortran to calculate the dot product. Your file may look something like this:
 
 {% highlight fortran %}
@@ -78,7 +78,7 @@ ccall((:__basic_example_MOD_dot, "./basic_example.so"),
 
 This should return `10.0`.
 
-# Slightly better example
+### Slightly better example
 
 If your Fortran code is part of a well established library, especially one which interacts with other languages, it is possible that your code uses C bindings. Alternatively, you may have some pull on how the code is written and you can add that yourself. In these cases, the following code pattern works for me:
 
@@ -120,7 +120,7 @@ ccall((:better_dot, "./better_example.so"),
 
 We will be using now `Cdouble`s and `Cint`s to make it clear that we are interoperable. Our `ccall` also looks a bit different: our return is now `Void`, and instead we are passing `a` as the container for our return. After running the code above, `a` will become `[10.0]`. Note the use of `NaN` in its first declaration: this helps us debug a faulty `ccall`.
 
-# Benchmarks
+#### Benchmarks
 
 Now that we know how to call Fortran code from Julia, let's do run some benchmarks. These are meant to be merely illustrative, and they are *not* rigorous benchmarks.
 
@@ -181,11 +181,11 @@ end
 A table with the summary of results can be found below:
 
 
-|                | Native Fortran |          | Julia Fortran |          | Native Julia |          |        |
-|---------------:|:--------------:|:--------:|:-------------:|:--------:|:------------:|:--------:|:------:|
-|                |     Serial     | Parallel |     Serial    | Parallel |    Serial    | Parallel | Native |
-|        Time (s)|      0.256     |   0.28   |      0.28     |   0.24   |      3.38    |    4.18  |  0.03  |
-| Rel. Speed  (x)|      8.3       |   9.2    |      9.1      |   7.7    |    109.0     |   135.2  |  1.0   |
+|           | Native Fortran |          | Julia Fortran |          | Native Julia |          |        |
+|----------:|:--------------:|:--------:|:-------------:|:--------:|:------------:|:--------:|:------:|
+|           |     Serial     | Parallel |     Serial    | Parallel |    Serial    | Parallel | Native |
+|   Time (s)|      0.256     |   0.28   |      0.28     |   0.24   |      3.38    |    4.18  |  0.03  |
+| Speed  (x)|      8.3       |   9.2    |      9.1      |   7.7    |    109.0     |   135.2  |  1.0   |
 
 Let's ignore the elephant in the room — native Julia seems faster than Fortran — for a second. If we compare native Julia and Fortran through Julia, we see almost no difference in times. The `ccall` overhead appears to be minimal. In addition, if we compare both of these to native, naive, Julia implementations, they are about an order of magnitude faster, which is consistent with standard Julia benchmarks. Finally, the reason why the native Julia implementation is so darn fast is because in reality, it relies on BLAS. The code for it can be found in the standard library. A (slightly adapted) version can be found below:
 
