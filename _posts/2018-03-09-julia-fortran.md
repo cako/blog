@@ -36,11 +36,63 @@ The process of accessing this through Julia is simple, but with a few caveats al
 gfortran basic_example.f95 -o basic_example.so -shared -fPIC
 {% endhighlight %}
 
-As the documentation states, we must ensure that a shared library with position independent code (PIC) is used.  After that, we ideally would be able to call it from Julia with 
+As the documentation states, we must ensure that a shared library with position-independent code ([PIC](https://en.wikipedia.org/wiki/Position-independent_code)) is used.  After that, we ideally would be able to call it from Julia with 
+
 {% highlight julia %}
 ccall((:dot, "./basic_example.so"), ...
 {% endhighlight %}
-Unfortunately that is not the case: one must use Fortran symbol name of the function, which is unlikely to be `dot` as Fortran [generates mangled names](https://en.wikipedia.org/wiki/Name_mangling#Fortran). 
 
+Unfortunately that is not the case: one must use Fortran symbol name of the function, which is unlikely to be `dot` as Fortran [generates mangled names](https://en.wikipedia.org/wiki/Name_mangling#Fortran). In order to address that we must find the symbol name. A quick way to do that in Linux is to use the `nm` command, which lists the names of symbols in a library:
 
+{% highlight bash %}
+nm basic_example.so | grep dot
+{% endhighlight %}
 
+On my machine this returns `__basic_example_MOD_dot`, which is the name which should be used in the `ccall`. In the next example we will see how we can bypass name mangling.
+
+Now we have to worry about variable types. The output is `real` and the inputs are: single `integer`, two `real` arrays. C has system independent `float`s which are nicely matched to Julia types such as `Float32` or its alias `Cfloat`. In Fortran that is not the case, our Fortran `real` most likely means `real*4`, which is equivalent to `Float32`, but we cannot be 100% sure, as it is architechture and compile dependent and could be for example `real*8`. The same goes for `integer` which most likely means `integer*4`, but can also mean `integer*2`. For now, we will just assume that `real` is a `Float32` and `integer` is an `Int32`. Our `dot` function should then real
+
+{% highlight julia %}
+ccall((:__basic_example_MOD_dot, "./basic_example.so"), Float32, (Ref{Int32}, Ref{Float32}, Ref{Float32}), ...
+{% endhighlight %}
+
+As per advised by the documentation, we should pass `Ref`s when the memory is allocated by Julia (our case), as opposed to `Ptr` when it is allocated by the other language. We are now nearly there and all we have to do is create some input and pass that to the `ccall`:
+
+{% highlight julia %}
+x = Float32[1,2,3,4]
+y = Float32[1,1,1,1]
+n = Int32[4]
+{% endhighlight %}
+
+The arrays are straightforward, this is how you usually allocate arrays. This is because the Fortran `ccall` demands passing references (or pointers) which is fine for arrays, because they are passed by reference. An integer variable, on the other hand, is not bound to the reference of the variable, but to the value itself. Therefore, to make our lives easier, we will just encase it within an `Int32` array. With all that in mind, our `ccall` will look like:
+
+{% highlight julia %}
+ccall((:__basic_example_MOD_dot, "./basic_example.so"), Float32, (Ref{Int32}, Ref{Float32}, Ref{Float32}), n, x, y)
+{% endhighlight %}
+
+This should return `10.0`.
+
+# Slightly better example
+
+If your Fortran code is part of a well established library, especially one which interacts with other languages, it is possible that your code uses C bindings. Alternatively, you have some pull on how the code is written and you can add that yourself. In this case, the following code pattern essentially works for me.
+
+{% highlight julia %}
+module better_example
+    use, intrinsic :: iso_c_binding
+    implicit none
+    contains
+
+    subroutine dot(n, x, y, a) bind(c, name="better_dot")
+        integer, intent(in) :: n
+        real(c_double), dimension(n), intent(in) :: x, y
+        real(c_double), intent (out) :: a
+        integer :: i
+        a = 0.
+        do i=1, n
+            a  = a + x(i)*y(i)
+        end do
+    end subroutine dot
+end module better_example
+{% endhighlight %}
+
+The first difference we notice is the use of [`iso_c_binding`](https://gcc.gnu.org/onlinedocs/gfortran/ISO_005fC_005fBINDING.html). This creates named constants which are equivalent to their C types. In  multilanguage setting, it sets a standard dialect to be spoken by all. The second difference is the use of `bind` after the `subroutine` definition. This ensures that the `subroutine` can be accessed by C functions. Conveniently, it also means that we can name the structure without the standard mangling. I chose to call it `better_dot`, but omitting `name=` in this case would just result in `dot`.
