@@ -15,4 +15,6 @@ layout: default
         <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>
     </article>
     {% endfor %}
+
 </div>
+<footer><span class="author"><i class="icon-user"></i>--{% if page.author %}<a href="https://carloscosta.heroukapp.com">{{page.author}}</a>{% else %}{{site.author}}{% endif%}</span></footer>
