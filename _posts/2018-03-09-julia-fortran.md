@@ -181,7 +181,7 @@ end
 A table with the summary of results can be found below:
 
 
-|                | Native | Fortran          | Julia |  Fortran         | Native |  Julia         |        |
+|                | Native   Fortran          | Julia    Fortran         | Native    Julia                  |
 |---------------:|:--------------:|:--------:|:-------------:|:--------:|:------------:|:--------:|:------:|
 |                |     Serial     | Parallel |     Serial    | Parallel |    Serial    | Parallel | Native |
 |        Time (s)|      0.256     |   0.28   |      0.28     |   0.24   |      3.38    |    4.18  |  0.03  |
