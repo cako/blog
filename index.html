@@ -17,4 +17,4 @@ layout: default
     {% endfor %}
 
 </div>
-<footer><span class="author"><i class="icon-user"></i>--{% if page.author %}<a href="https://carloscosta.heroukapp.com">{{page.author}}</a>{% else %}{{site.author}}{% endif%}</span></footer>
+<footer><span class="author"><i class="icon-user"></i>--<a href="https://carloscosta.heroukapp.com">{% if page.author %}{{page.author}}{% else %}{{site.author}}{% endif%}</a></span></footer>
