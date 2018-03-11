@@ -97,7 +97,16 @@ ccall((:__basic_example_MOD_dot, "./basic_example.so"),
       n, x, y)
 {% endhighlight %}
 
-This should return `10.0`.
+This should return `10.0`. If, for some reason, you do not want to encase your value in an array, you can always use the `Ref` function to obtain its reference. For example, if I had an `Int32` bound to `n` (for example through `n = Int32[4][]`), I would change the last line of the previous code from
+{% highlight julia %}
+      ...
+      n, x, y)
+{% endhighlight %}
+to
+{% highlight julia %}
+      ...
+      Ref(n), x, y)
+{% endhighlight %}
 
 #### Slightly better example
 
