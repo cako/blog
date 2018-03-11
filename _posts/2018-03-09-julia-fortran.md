@@ -240,6 +240,7 @@ Let's ignore the elephant in the room — native Julia seems faster than Fortran
 If we compare native Fortran and Fortran through Julia, we see almost no difference in times.
 The `ccall` overhead appears to be minimal.
 In addition, if we compare both of these to native, naive, Julia implementations, they are about an order of magnitude faster, which is consistent with standard Julia benchmarks.
+(Note: adding [performance tips](https://docs.julialang.org/en/stable/manual/performance-tips/) like `@fastmath`, `@simd`, `@inbounds` does not change the results significantly.)
 
 With this said, the reason why the native Julia implementation is so darn fast is because in reality, it relies on BLAS.
 The code for it can be found in the standard library.
