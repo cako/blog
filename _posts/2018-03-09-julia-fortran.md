@@ -205,7 +205,7 @@ module dot_prod
 end module dot_prod
 {% endhighlight %}
                     
-These functions were compiled to a standard Fortran binary (`-O3 -fopenmp`), to be our native Fortran comparison.
+These functions were compiled to a standard Fortran binary (`-O3 -march=native -fopenmp`), to be our native Fortran comparison.
 The full benchmarking code can be found [here](https://github.com/cako/cako.github.io/blob/master/codes/2018-03-09-julia-fortran/bench_example.f95).
 They were also compiled to a library to be called from Julia.
 Finally, I also benchmarked the native dot product, as well as naive serial and idiomatic parallel implementations which can be respectively found below.
@@ -227,14 +227,14 @@ function pdot(n, x, y)
 end
 {% endhighlight %}
 
-A table with the summary of results can be found below (run with `julia -p 2`):
+A table with the summary of results can be found below (run with `julia -p 2`, taking the minimum over 3 runs):
 
 
 |           | Native Fortran |          | Julia Fortran |          | Native Julia |          |        |
 |----------:|:--------------:|:--------:|:-------------:|:--------:|:------------:|:--------:|:------:|
 |           |     Serial     | Parallel |     Serial    | Parallel |    Serial    | Parallel | Native |
-|   Time (s)|      0.26      |   0.28   |      0.28     |   0.24   |      3.38    |    4.18  |  0.03  |
-| Speed  (x)|      8.3       |   9.2    |      9.1      |   7.7    |    109.0     |   135.2  |  1.0   |
+|   Time (s)|      0.19      |   0.23   |      0.29     |   0.22   |      3.34    |    4.36  |  0.03  |
+| Speed  (x)|      6.0       |   7.3    |      9.2      |   7.2    |    106.0     |   138.1  |  1.0   |
 
 Let's ignore the elephant in the room — native Julia seems faster than Fortran — for a second.
 If we compare native Fortran and Fortran through Julia, we see almost no difference in times.
