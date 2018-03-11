@@ -254,7 +254,7 @@ function dot(n::Integer, DX::Union{Ptr{Float64},DenseArray{Float64}}, incx::Inte
 end
 {% endhighlight %}
 
-In this case, Julia is really fast because it is relying on special Fortran libraries to do the dirty work.
+In this case, Julia is really fast because it is relying on special Fortran libraries to do the dirty work. (Hint: Don't use `&` syntax as it is deprecated!)
 
 #### Conclusions
 I hope this post has been able to convince you that using Fortran from Julia is not only easy, it is fast both in terms of implementation and in terms of computation.
