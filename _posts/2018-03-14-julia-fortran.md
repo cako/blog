@@ -11,7 +11,7 @@ But while [examples for C abound](https://docs.julialang.org/en/stable/manual/ca
 
 The objective of this short tutorial is to get you up to speed with calling Fortran code from Julia in the most painless way possible.
 Most information here has been obtained from the Julia documentation and this [very enlightening discussion](https://groups.google.com/forum/#!topic/julia-users/Hujil3RqWQQ), both of which I highly recommend reading.
-If you want to skip the read and just grab the codes, head [here](https://github.com/cako/cako.github.io/tree/master/codes/2018-03-09-julia-fortran).
+If you want to skip the read and just grab the codes, head [here](https://github.com/cako/cako.github.io/tree/master/codes/2018-03-14-julia-fortran).
 
 #### Super basic example
 Let's say you have a Fortran `function` or `subroutine` to calculate the dot product.
@@ -206,10 +206,10 @@ end module dot_prod
 {% endhighlight %}
                     
 These functions were compiled to a standard Fortran binary (`-O3 -march=native -fopenmp`), to be our native Fortran comparison.
-The full benchmarking code can be found [here](https://github.com/cako/cako.github.io/blob/master/codes/2018-03-09-julia-fortran/bench_example.f95).
+The full benchmarking code can be found [here](https://github.com/cako/cako.github.io/blob/master/codes/2018-03-14-julia-fortran/bench_example.f95).
 They were also compiled to a library to be called from Julia.
 Finally, I also benchmarked the native dot product, as well as naive serial and idiomatic parallel implementations which can be respectively found below.
-The full Julia benchmark code can be found [here](https://github.com/cako/cako.github.io/blob/master/codes/2018-03-09-julia-fortran/bench_example.jl).
+The full Julia benchmark code can be found [here](https://github.com/cako/cako.github.io/blob/master/codes/2018-03-14-julia-fortran/bench_example.jl).
 
 {% highlight julia %}
 function sdot(n, x, y)
