@@ -1,51 +1,85 @@
-n = Cint[10000]
-x = [ 1. for i=1:n[]]
-y = [ i for i=1.:n[]]
+using BenchmarkTools
 
-
-function sdot(n, x, y)
-    a = 0
-    for i=1:n[]
-        a += x[i]*y[i]
+function sdot(a::AbstractVector{T}, b::AbstractVector{T}) where {T}
+    v = zero(T)
+    @inbounds @simd for i = 1 : length(a)
+        v += a[i] * b[i]
     end
-    a
+
+    v
 end
 
-function pdot(n, x, y)
-    @parallel (+) for i=1:n[]
+"""
+    split(N, P, i) -> from:to
+    
+Find the ith range when 1:N is split into P consecutive parts of roughly equal size
+"""
+function split(N, P, i)
+    base, rem = divrem(N, P)
+    from = (i - 1) * base + min(rem, i - 1) + 1
+    to = from + base - 1 + (i ≤ rem ? 1 : 0)
+    from : to
+end
+
+function pdot(a::AbstractVector{T}, b::AbstractVector{T}) where {T}
+    N = Threads.nthreads()
+    v = zeros(T, N)
+    Threads.@threads for i in 1:N
+        x = zero(T)
+        P = Threads.threadid()
+        range = split(length(a), N, P)
+        @inbounds @simd for i in range
+            x += a[i] * b[i]
+        end
+        v[P] = x
+    end
+    sum(v)
+end
+
+@everywhere @inbounds @fastmath function ppdot(x, y)
+    @parallel (+) for i=1:length(x)
         x[i]*y[i]
     end
 end
 
-const benchlib = "./bench_example.so"
-println("Serial Fortran")
-p = ccall((:sdot, benchlib), Cdouble, (Ref{Cint}, Ref{Cdouble}, Ref{Cdouble}), n, x, y)
-println(@sprintf(" %.2f", p))
-@time for i=1:n[]
-    ccall((:sdot, "./bench_example.so"), Cdouble, (Ref{Cint}, Ref{Cdouble}, Ref{Cdouble}), n, x, y)
+function fsdot(x::AbstractVector{Float64}, y::AbstractVector{Float64})
+    const benchlib = "./bench_example.so"
+   return ccall((:sdot, benchlib), Cdouble, (Ref{Cint},Ref{Cdouble},Ref{Cdouble}),
+                Cint[length(x)], x, y)
 end
 
-println("\nParallel Fortran")
-p = ccall((:pdot, benchlib), Cdouble, (Ref{Cint}, Ref{Cdouble}, Ref{Cdouble}), n, x, y)
-println(@sprintf("  %.2f", p))
-@time for i=1:n[]
-    ccall((:pdot, benchlib), Cdouble, (Ref{Cint}, Ref{Cdouble}, Ref{Cdouble}), n, x, y)
+function fpdot(x::AbstractVector{Float64}, y::AbstractVector{Float64})
+    const benchlib = "./bench_example.so"
+   return ccall((:pdot, benchlib), Cdouble, (Ref{Cint},Ref{Cdouble},Ref{Cdouble}),
+                Cint[length(x)], x, y)
 end
 
-println("\nNaive Julia")
-println(@sprintf("  %.2f", sdot(n, x, y)))
-@time for i=1:n[]
-    sdot(n, x, y)
+function bench(n = 100_000)
+    a = ones(Float64, n)
+    b = Float64[i for i=1:n]
+    threads = parse(Int, ENV["JULIA_NUM_THREADS"])
+    omp_threads = parse(Int, ENV["OMP_NUM_THREADS"])
+
+    # Sanity check
+    @assert dot(a,b) ≈ pdot(a,b) ≈ sdot(a, b) ≈ fsdot(a, b) ≈ fpdot(a, b) ≈ ppdot(a, b)
+
+    print("Julia Fortran (no threads):\t")
+    println(@benchmark fsdot($a, $b))
+    print("Julia Fortran (", omp_threads, " threads):\t")
+    println(@benchmark fpdot($a, $b))
+
+    BLAS.set_num_threads(threads)
+    print("Julia BLAS (", threads, " threads):\t")
+    println(@benchmark dot($a, $b))
+    print("Julia (no threads):\t")
+    println(@benchmark sdot($a, $b))
+    print("Julia (", threads, " threads):\t")
+    println(@benchmark pdot($a, $b))
+
+    a = convert(SharedArray, a)
+    b = convert(SharedArray, b)
+    print("Julia (", nprocs()-1, " procs):\t")
+    println(@benchmark ppdot($a, $b))
 end
 
-println("\nNative Julia")
-println(@sprintf("  %.2f", dot(x, y)))
-@time for i=1:n[]
-    dot(x, y)
-end
-
-println("\nIdiomatic parallel Julia")
-println(@sprintf("  %.2f", pdot(n, x, y)))
-@time for i=1:n[]
-    pdot(n, x, y)
-end
+bench()

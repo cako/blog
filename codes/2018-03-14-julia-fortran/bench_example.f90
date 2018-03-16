@@ -36,31 +36,46 @@ program time_dot
     use dot_prod
     implicit none
 
-    real :: start_time, stop_time
-    integer(c_int), parameter :: n = 10000
+    real(c_double), external :: ddot
+    real(c_double) :: start_time, stop_time
+    integer(c_int), parameter :: n = 100000
     real(c_double), dimension(n) :: x, y
-    real(c_double) :: p
-    integer(c_int) :: i
+    real(c_double) :: p1, p2, p3
+    integer(c_int) :: i, threads
+    !$OMP PARALLEL
+    threads = omp_get_num_threads()
+    !$OMP END PARALLEL
 
-    x = (/ (1., i=1,n) /)
+    x = 1.
     y = (/ (i, i=1,n) /)
 
-    start_time = omp_get_wtime()
-    do i=1, n
-        p = sdot(n, x, y)
-    enddo
-    stop_time = omp_get_wtime()
-    print *, "Native serial Fortran"
-    print "(F14.2)", p
-    write(*,fmt="(F15.10,A)") stop_time-start_time, " seconds"
+    p1 = sdot(n, x, y)
+    p2 = ddot(n, x, 1, y, 1)
+    p3 = pdot(n, x, y)
+    if ((p1 /= p2 .OR. p2 /= p3) .OR. p1 /= p3) then 
+        print *, "Values do not match"
+        call exit(1)
+    endif
 
     start_time = omp_get_wtime()
     do i=1, n
-        p = pdot(n, x, y)
+        p1 = sdot(n, x, y)
     enddo
     stop_time = omp_get_wtime()
-    print *
-    print *, "Native parallel Fortran"
-    print "(F14.2)", p
-    write(*,fmt="(F15.10,A)") stop_time-start_time, " seconds"
+    write(*,*) p1
+    write(*,fmt="(A,F8.3,A)") "Native Fortran (no threads): ", 1e6*(stop_time-start_time)/n, " μs"
+
+    start_time = omp_get_wtime()
+    do i=1, n
+        p2 = ddot(n, x, 1, y, 1)
+    enddo
+    stop_time = omp_get_wtime()
+    write(*,fmt="(A,F10.3,A)") "Fortran BLAS (no threads): ", 1e6*(stop_time-start_time)/n, " μs"
+
+    start_time = omp_get_wtime()
+    do i=1, n
+        p3 = pdot(n, x, y)
+    enddo
+    stop_time = omp_get_wtime()
+    write(*,fmt="(A,I1,A,F9.3,A)") "Native Fortran (", threads," threads): ", 1e6*(stop_time-start_time)/n, " μs"
 end program time_dot
