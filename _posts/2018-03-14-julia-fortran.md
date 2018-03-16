@@ -38,7 +38,7 @@ The process of accessing this through Julia is simple, but with a few caveats al
 The compilation is simple:
 
 {% highlight bash %}
-gfortran basic_example.f95 -o basic_example.so -shared -fPIC
+gfortran basic_example.f90 -o basic_example.so -shared -fPIC
 {% endhighlight %}
 
 As the documentation states, we must ensure that a shared library with position-independent code ([PIC](https://en.wikipedia.org/wiki/Position-independent_code)) is used.
@@ -63,7 +63,7 @@ In the next example we will see how we can bypass name mangling.
 Now we have to worry about variable types.
 The output is `real` and the inputs are: single `integer`, two `real` arrays.
 C has system independent `float`s which are nicely matched to Julia types such as `Float32` or its alias `Cfloat`.
-In Fortran that is not the case, our Fortran `real` most likely means `real*4`, which is equivalent to `Float32`, but we cannot be 100% sure, as it is architechture- and compiler-dependent, and could be `real*8`, for example.
+In Fortran that is not the case, our Fortran `real` most likely means `real*4`, which is equivalent to `Float32`, but we cannot be 100% sure, as it is architecture- and compiler-dependent, and could be `real*8`, for example.
 The same goes for `integer` which most likely means `integer*4`, but can also mean `integer*2`.
 For now, we will just assume that `real` is a `Float32` and `integer` is an `Int32`.
 Our `dot` function should then read
@@ -135,7 +135,7 @@ end module better_example
 
 The first difference we notice is the use of `iso_c_binding`.
 This creates named constants which are equivalent to their C types (see [here](https://gcc.gnu.org/onlinedocs/gfortran/ISO_005fC_005fBINDING.html)).
-In a multilanguage setting, it sets a standard dialect to be spoken by all.
+In a multi-language setting, it sets a standard dialect to be spoken by all.
 
 The second difference is the use of `bind` after the `subroutine` definition.
 This ensures that the `subroutine` can be accessed by C functions.
@@ -205,25 +205,36 @@ module dot_prod
 end module dot_prod
 {% endhighlight %}
                     
-These functions were compiled to a standard Fortran binary (`-O3 -march=native -fopenmp`), to be our native Fortran comparison.
-The full benchmarking code can be found [here](https://github.com/cako/cako.github.io/blob/master/codes/2018-03-14-julia-fortran/bench_example.f95).
+These functions were compiled to a standard Fortran binary (`-Ofast -fopenmp -lblas -march=native`), to be our native Fortran comparison.
+The full benchmarking code can be found [here](https://github.com/cako/cako.github.io/blob/master/codes/2018-03-14-julia-fortran/bench_example.f90).
 They were also compiled to a library to be called from Julia.
-Finally, I also benchmarked the native dot product, as well as naive serial and idiomatic parallel implementations which can be respectively found below.
+Finally, I also benchmarked the native dot product, as well as a serial and a multi-threaded parallel implementation ([courtesy of `@stabbles` and `@bkamins`](https://discourse.julialang.org/t/innefficient-paralellization-need-some-help-optimizing-a-simple-dot-product)) which can be respectively found below.
 The full Julia benchmark code can be found [here](https://github.com/cako/cako.github.io/blob/master/codes/2018-03-14-julia-fortran/bench_example.jl).
+I also provide a script to compile, run and benchmark these two codes at once.
+Grab it from [here}(https://github.com/cako/cako.github.io/blob/master/codes/2018-03-14-julia-fortran/bench_example.sh).
 
 {% highlight julia %}
-function sdot(n, x, y)
-    a = 0
-    for i=1:n[]
-        a += x[i]*y[i]
+function sdot(a::AbstractVector{T}, b::AbstractVector{T}) where {T}
+    v = zero(T)
+    @inbounds @simd for i = 1 : length(a)
+        v += a[i] * b[i]
     end
-    a
+    v
 end
 
-function pdot(n, x, y)
-    @parallel (+) for i=1:n[]
-        x[i]*y[i]
+function pdot(a::AbstractVector{T}, b::AbstractVector{T}) where {T}
+    N = Threads.nthreads()
+    v = zeros(T, N)
+    Threads.@threads for i in 1:N
+        x = zero(T)
+        P = Threads.threadid()
+        range = split(length(a), N, P)
+        @inbounds @simd for i in range
+            x += a[i] * b[i]
+        end
+        v[P] = x
     end
+    sum(v)
 end
 {% endhighlight %}
 
@@ -233,29 +244,25 @@ A table with the summary of results can be found below (run with `julia -p 2`, t
 |           | Native Fortran |          | Julia Fortran |          | Native Julia |          |        |
 |----------:|:--------------:|:--------:|:-------------:|:--------:|:------------:|:--------:|:------:|
 |           |     Serial     | Parallel |     Serial    | Parallel |    Serial    | Parallel | Native |
-|   Time (s)|      0.19      |   0.12   |      0.28     |   0.23   |      3.34    |    4.36  |  0.03  |
-| Speed  (x)|      6.1       |   3.7    |      9.1      |   7.4    |    123.2     |   162.6  |  1.0   |
+|  Time (µs)|      51.1      |   30.8   |      47.1     |   22.2   |     48.7     |    34.3  |  37.3  |
+| Speed  (x)|      2.3       |   1.4    |      2.1      |    1     |      2.2     |     1.5  |  1.7   |
 
-Let's ignore the elephant in the room — native Julia seems faster than Fortran — for a second.
 If we compare native Fortran and Fortran through Julia, we see almost no difference in times.
-The `ccall` overhead appears to be minimal.
-In addition, if we compare both of these to native, naive, Julia implementations, they are about an order of magnitude faster, which is consistent with standard Julia benchmarks.
-(Note: adding [performance tips](https://docs.julialang.org/en/stable/manual/performance-tips/) like `@fastmath`, `@simd`, `@inbounds` does not change the results significantly.)
-
-With this said, the reason why the native Julia implementation is so darn fast is because in reality, it relies on BLAS.
-The code for it can be found in the standard library.
+Fotran called from Julia is in fact, slightly faster, for reasons I don't fully comprehend.
+In any case the `ccall` overhead is negligible.
+We also do very well with pure Julia.
+This requires activating some [performance tips](https://docs.julialang.org/en/stable/manual/performance-tips/) like `@simd`, `@inbounds`, and type stability.
+The [native Julia `dot`](https://github.com/JuliaLang/julia/blob/master/stdlib/LinearAlgebra/src/blas.jl), which relies on BLAS (which is not multi-threaded), is also very performant.
 A (slightly adapted) version can be found below:
 
 {% highlight julia %}
-function dot(n::Integer, DX::Union{Ptr{Float64},DenseArray{Float64}}, incx::Integer,
-                         DY::Union{Ptr{Float64},DenseArray{Float64}}, incy::Integer)
-    ccall((@blasfunc(:ddot_), libblas), Float64,
-          (Ptr{BlasInt}, Ptr{Float64}, Ptr{BlasInt}, Ptr{Float64}, Ptr{BlasInt}),
-          &n, DX, &incx, DY, &incy)
+function dot(n::Integer, DX::Union{Ptr{Float64},AbstractArray{Float64}}, incx::Integer,
+                         DY::Union{Ptr{Float64},AbstractArray{Float64}}, incy::Integer)
+    ccall((:ddot, libblas), Float64,
+        (Ref{BlasInt}, Ptr{Float64}, Ref{BlasInt}, Ptr{Float64}, Ref{BlasInt}),
+        n, DX, incx, DY, incy)
 end
 {% endhighlight %}
-
-In this case, Julia is really fast because it is relying on special Fortran libraries to do the dirty work. (Hint: Don't use `&` syntax as it is deprecated!)
 
 #### Conclusions
 I hope this post has been able to convince you that using Fortran from Julia is not only easy, it is fast both in terms of implementation and in terms of computation.
