@@ -211,7 +211,7 @@ They were also compiled to a library to be called from Julia.
 Finally, I also benchmarked the native dot product, as well as a serial and a multi-threaded parallel implementation ([courtesy of `@stabbles` and `@bkamins`](https://discourse.julialang.org/t/innefficient-paralellization-need-some-help-optimizing-a-simple-dot-product)) which can be respectively found below.
 The full Julia benchmark code can be found [here](https://github.com/cako/cako.github.io/blob/master/codes/2018-03-14-julia-fortran/bench_example.jl).
 I also provide a script to compile, run and benchmark these two codes at once.
-Grab it from [here}(https://github.com/cako/cako.github.io/blob/master/codes/2018-03-14-julia-fortran/bench_example.sh).
+Grab it from [here](https://github.com/cako/cako.github.io/blob/master/codes/2018-03-14-julia-fortran/bench_example.sh).
 
 {% highlight julia %}
 function sdot(a::AbstractVector{T}, b::AbstractVector{T}) where {T}
@@ -238,7 +238,7 @@ function pdot(a::AbstractVector{T}, b::AbstractVector{T}) where {T}
 end
 {% endhighlight %}
 
-A table with the summary of results can be found below (run with `julia -p 2`, taking the minimum over 3 runs):
+A table with the summary of results can be found below (see [here](https://github.com/cako/cako.github.io/blob/master/codes/2018-03-14-julia-fortran/bench_example.sh)):
 
 
 |           | Native Fortran |          | Julia Fortran |          | Native Julia |          |        |
