@@ -1,0 +1,621 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Course Catalogue - Palaeontology and Sedimentology (EASC10106)</title>
+<meta name="type" content="DPT"></meta>
+<meta name="modcode" content="EASC10106"></meta>
+<meta name="modname" content="Palaeontology and Sedimentology"></meta>
+<meta name="modkeywords" content="Palaeontology,Sedimentology,Fieldwork"></meta>
+<meta name="modschool" content=""></meta>
+<meta name="modsubj" content=""></meta>
+<meta name="modsubj" content=""></meta>
+<!-- use stylesheets from DRPS -->
+<link rel="stylesheet" type="text/css" href="http://www.ed.ac.uk/other/styles.css">
+<link rel="stylesheet" type="text/css" href="../css/dp.css">
+<link rel="stylesheet" type="text/css" href="../17-18/dpts/dpt.css">
+
+<!-- add SITS styles -->
+<style type="text/css">
+
+.rowhead1 { font-family: 'Trebuchet MS', 'Lucida Grande', Verdana, Arial, Helvetica, sans-serif; 
+font-size: 75%;  color: #555555; /* replaces 25476C */
+background-color: #EEEEFF; /* replaces EAEEF5 */
+font-weight: bold;
+}
+
+.data1nobg { font-family: 'Trebuchet MS', 'Lucida Grande', Verdana, Arial, Helvetica, sans-serif;  
+color: #333; /* replaces 666 */
+font-weight: normal }
+
+.sitstablegrid {
+	width:100%; /* overall default table width */
+	margin-bottom:20px; /* separator space below each table */
+}
+
+.sitstablegrid caption {	
+	font-family: 'Trebuchet MS', 'Lucida Grande', Verdana, Arial, Helvetica, sans-serif;
+	font-size:75%;	
+	color: #FFFFFF;
+	padding:6px;
+	font-weight: bold;
+	text-align: left;
+	background:#232B5A; /* replaces 25476c */
+}
+
+.sitstablegrid caption,
+.sitstablegrid th, 
+.sitstablegrid td {
+	font-family: 'Trebuchet MS', 'Lucida Grande', Verdana, Arial, Helvetica, sans-serif;
+	font-size:75%;
+	padding: 4px;
+	vertical-align:top;
+}
+
+.sitstablegrid th {
+	background-color:#232B5A; /* replaces 36a7e9 */
+	padding-right: 5px; /* required to keep right aligned TH row headings from edge of cell */
+	color:#FFFFFF;
+	border:1px solid #CCCCCC;
+	border-collapse:collapse;
+}
+
+.sitstablegrid {
+	background-color: #FFFFFF; /* background shade applied to all cells */
+	border: 1px solid #cccccc; /* table outline box */
+	border-collapse: collapse;
+}
+
+.sitstablegrid th, 
+.sitstablegrid td {
+	border: 1px solid #cccccc; /* draws grid lines for sitstablegrid style class */
+	}
+
+#sitspagetitle {
+} 
+  
+h1.sitspagetitle {
+	font-family: 'Trebuchet MS', 'Lucida Grande', Verdana, Arial, Helvetica, sans-serif;
+	font-size: 80%;
+	color: #232B5A; /* replaces 25476c */
+	font-weight: bold;
+	border-bottom:1px solid #232B5A; /* replaces 25476c */
+}
+
+</style>
+</head>
+
+<body>
+<!-- header from DRPS -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #232B5A;">
+<tr>
+<td width="84" align="left" valign="top">
+<a href="http://www.ed.ac.uk" class="headertext"><img src="http://www.drps.ed.ac.uk/images/logo.jpg" alt="The University of Edinburgh" name="logo" width="84" height="84" border="0" id="logo"></a>
+</td>
+
+<td align="left" width="100%">
+<h3 class="page_title">THE UNIVERSITY of EDINBURGH</h3>
+<h1 class="page_title">DEGREE REGULATIONS & PROGRAMMES OF STUDY 2017/2018</h1>
+</td>
+
+<td align="left">
+
+<table border="0" cellpadding="0" cellspacing="0" style="margin-right:20px;"><tr>
+<td style="white-space:nowrap">
+<a href="http://www.ed.ac.uk" class="headertext"><img src="../images/arrow.gif" width="16" height="11" border="0" alt=""></a><a href="http://www.ed.ac.uk" class="headertext">University&nbsp;Homepage</a>
+<br />
+<a href="../index.php" class="headertext"><img src="../images/arrow.gif" width="16" height="11" border="0" alt=""></a><a href="../index.php" class="headertext">DRPS Homepage</a>
+<br />
+<a href="cx_search.htm" class="headertext"><img src="../images/arrow.gif" width="16" height="11" border="0" alt=""></a><a href="cx_search.htm" class="headertext">DRPS Search</a>
+<br />
+<a href="../contact.php" class="headertext"><img src="../images/arrow.gif" width="16" height="11" border="0" alt=""></a><a href="../contact.php" class="headertext">DRPS Contact</a>
+</td></tr>
+</table>
+
+</td></tr>
+</table>
+
+<div class="college"><a href="../index.php">DRPS</a>&nbsp;:&nbsp;Course Catalogue&nbsp;:&nbsp;<a href="cx_s_su849.htm">School of Geosciences</a>&nbsp;:&nbsp;<a href="cx_sb_easc.htm">Earth Science</a></div>
+
+<table width="100%" border="0" cellpadding="6" cellspacing="0" class="content">
+<tr valign="top"><td>
+<!-- IMPORTANT Any changes to this SRL should be tested as follows:
+- via 'View Course' and 'Amend Course' in Curriculum Management -> CCAM containter, 
+- on linking from within OCSS/OCE 
+- the course catalogue (post March '10.
+If any additional SITS classes are used  (eg sitstablenogrid) then these must be added
+to SLPs CX_CRSHDR1 and CX_CRSHDR2 for the course catalogue. The course catalogue SRL cannot include sits.css as this overwrites
+University website styles -->
+
+<!-- temp variables passed in to determine various display options as follows -->
+<!-- GSL_TMP1: blank or not CCAM: limited details displayed (link from OCSS, course catalogue); "CCAM" = all details; CCAMSUM = called from CCAM input/Amend course task (CCAM1_A4) so don't need instance data, no pre-requisites etc (because editable on on task screen ) -->
+<!-- GSL_TMP2: Academic Year: if not null then a MAV(s) in single year is/are displayed for delivery; if null then SRL uses SLP CURRENT_AYR_CODE to display all MAV from current year forwards -->
+<!-- GSL_TMP3: Display Portal links: Y or null - display links; N - don't display links (could link to external web server) -->
+<!-- GSL_TMP4:passed in and passed through to CLASSES_TAB SRL. If set to Y then First class and additional info displayed-->
+<!-- GSL_TMP5.GSL=DRPS if this is called via DRPS publish, else null-->
+<!-- GSL_TMP6.GSL=visiting students from slp sma_vs_r which calls task sma_vs_r -->
+<!-- GSL_TMP6 and in syp: siw_mod_001 -->
+
+<!--
+START IN MOD.COURSE_DETS </br>
+gsl_tmp6: </br>
+gsl_tmp1:NULL </br>
+
+-->
+
+
+
+<style type="text/css">
+<!--
+#sitspagetabs-vert { 
+display: none;
+}
+-->
+</style>
+<!-- Course name, code, credits, subject area, brief description -->
+<br />
+<h1 id="sitspagetitle" class="sitspagetitle" style="font-size:150%;">Undergraduate Course: Palaeontology and Sedimentology (EASC10106)</h1>
+<table class="sitstablegrid">
+
+<!--FB 2/1/11 is course marked as closed? -->
+
+
+<caption>Course Outline</caption>
+<tr>
+<td class="rowhead1" width="15%">School</td><td width="35%">School of Geosciences</td>
+<td class="rowhead1" width="15%">College</td><td width="35%">College of Science and Engineering</td>
+</tr>
+<tr>
+<td class="rowhead1" width="15%">Credit level (Normal year taken)</td><td width="35%">SCQF Level 10 (Year 3 Undergraduate)</td>
+
+<td class="rowhead1" width="15%">Availability</td><td width="35%">Available to all students</td>
+</tr>
+<tr>
+<td class="rowhead1" width="15%">SCQF Credits</td><td width="35%">20</td>
+<td class="rowhead1" width="15%">ECTS Credits</td><td width="35%">10</td>
+</tr>
+<tr>
+
+</tr>
+<tr>
+<td class="rowhead1" width ="15%">Summary</td><td width="85%" colspan="99">The course covers selected aspects of palaeontology and sedimentology as two on-going strands during semester 1. These are essentially two different subject areas.  The sedimentology component will build on second year course material, whereas the palaeontology component will be more introductory. <br />
+The palaeontology and sedimentology stands will achieve effective synergy in the context of four dedicated half-day fieldtrips to Palaeozoic rocks in the vicinity of Edinburgh.<br />
+<br />
+***Field course locations may change for a variety of reasons, including security risks, increased costs or inability to access field locations. Any changes to the main destination of the field course will be announced as soon as possible.***</td>
+</tr>
+<tr>
+<td class="rowhead1" width ="15%">Course description</td><td width="85%" colspan="99">
+    
+    Palaeontology component<br />
+<br />
+Mon 18th Sept. Steve Brusatte: <br />
+Lecture Introductory lecture and practical introducing the major groups of invertebrate fossils that will be encountered in the field excursions. <br />
+Division of class into groups for eventual group presentations on field sites.<br />
+<br />
+Fieldtrip Mon 25th Sept. Steve Brusatte, Alastair Robertson and course demonstrators <br />
+Excursion to Pentland Hills: Silurian, brachiopods, trilobites, crinoids, corals, sponges, bryozoans, etc. in the context of fore-arc basin sedimentation related to subduction of the Iapetus ocean.<br />
+Note-trips may be swapped to take account of e.g. tides or adverse weather conditions in the hills.<br />
+<br />
+Fieldtrip Mon 2nd October Steve Brusatte, Alastair Robertson<br />
+Excursion to Dobb¿s Lin: Ordovician graptolites in the context of deep-sea organic-rich deposits and terrigenous turbidites that accumulated in a trench setting related to subduction of the Iapetus ocean)<br />
+<br />
+Fieldtrip Mon 9th October Steve Brusatte, Alastair Robertson <br />
+Excursion to Fife: Carboniferous, brachiopods, crinoids, bryozoans, etc. in the context of tropical shallow- marine sedimentation within the Midland Valley extensional basin.<br />
+<br />
+Fieldtrip Mon 16th October Steve Brusatte, Alastair Robertson, Rachel Wood <br />
+Excursion to East Lothian: Carboniferous, biostratigraphic exercise in the context of tropical shallow-marine sedimentation again within the Midland Valley extensional basin. <br />
+<br />
+Lecture Mon 23rd Oct Steve Brusatte  Lectures on major evolutionary transitions and evolution in deep time <br />
+Note-date may be swapped related to staff availability.<br />
+<br />
+Lecture &amp; Practical Steve Brusatte  Mon 30th Oct. Mass extinctions and biodiversity patterns<br />
+Note-date may be swapped related to staff availability.<br />
+<br />
+Lecture Mon 76h Nov. Dick Kroon  Micropalaeontology: mass extinctions as evidenced in microfossils; study of samples from before and after the Cretaceous-Paleogene impact, <br />
+Note-date may be swapped related to staff availability.<br />
+<br />
+Mon 13th Nov. Steve Brusatte, Alastair Robertson and course demonstrators (examining)<br />
+Group presentations of fieldtrip results (see below).<br />
+Presentation of 1500 words length: introduction (100 words), sedimentology (500 words), five fossils (800 words). Length does not include illustrations or literature references. <br />
+Hand-in to Grant Institute TO by 4 pm November 13th (see below). <br />
+<br />
+Fieldtrips: The fieldtrips will leave by coach as near as possible to 12.30 pm from the Grant Institute, KB and will return about 6 pm. If you have any difficulty making these times owing to teaching clashes or other issues please inform Steve Brusatte as soon as possible. Order of 2-4th fieldtrips may be changed owing e.g. to tides.<br />
+<br />
+<br />
+<br />
+Sedimentology component<br />
+<br />
+Wed 20 Sept Rachel Wood <br />
+L - Principles and application of sequence stratigraphy<br />
+P - Practical application of sequence stratigraphy (including specific geological examples)<br />
+Course feedback; practice degree exam question. Prepare an essay-style answer to the question: <br />
+Explain, with figures, the difference between lithostratigraphy and sequence stratigraphy¿<br />
+<br />
+Notes: Write an up to 1500-word essay on the above topic drawing on the lecture material and on related literature as directed by Rachel Wood. You may supplement this with your own literature search if you wish. <br />
+<br />
+Figures should include brief captions and be referred in the text of your answer. References consulted should be listed briefly at the end (not counted in word count). The answers will be marked and you will receive feedback with the aim of improving your degree exam answers.<br />
+Answers to be handed in to the Grant Institute TO by 10.30 am on Wednesday 22nd November.<br />
+<br />
+Wed 27th Sept Alastair Robertson <br />
+L - Role of chemical systems and processes: Ironstones. Composition, character and associations of ironstone minerals; distribution of ironstones in space and time. Outline of Precambrian iron formation<br />
+P - Petrography and hand specimens of ironstones and iron formation.<br />
+<br />
+Wed 4th Oct Stuart Haszeldine <br />
+L - Components of terrigenous clastic sediments. Different classification schemes and their applications to sediment provenance. <br />
+P - Examination of clastic sediments using the petrographic microscope.<br />
+<br />
+Wed 11th Oct Stuart Haszeldine<br />
+L - Diagenesis. Changes in clastic sediments after deposition, during burial, up to metamorphism. Cementation, dissolution, porosity, permeability and their application. <br />
+P - Examination of changes in a sandstone at different burial depths. <br />
+Wed 18th Oct Alastair Robertson<br />
+ L Role of chemical systems and processes:  Chert nomenclature and occurrence; chemical controls; silica diagenesis; controls on silica accumulation and chert formation in the stratigraphical record;<br />
+P Thin sections and chert samples<br />
+Wed 25th October Alastair Robertson<br />
+L Evaporites. Modern occurrences; sabkhas; barred basins (e.g. Messinian of Mediterranean, Permian of Zechstein). Evaporite diagenesis; importance in stratigraphical record<br />
+P Demonstration and thin sections of evaporates<br />
+Wed Nov 1st Rachel Wood<br />
+L Carbonates: a) Carbonate sedimentary rocks through time; b) Carbonate depositional environments: exposure surfaces; fresh-water; temperate shallow-sea; and deep-sea. <br />
+P Hand specimens, loose-sediment and thin-section examination of modern and ancient carbonates from exposure surface, fresh-water, temperate shallow-sea and deep-sea environments.<br />
+Wed Nov 8th Rachel Wood<br />
+Carbonates contd. L - Distribution and structure of modern coral reefs. <br />
+P - Demonstration and thin-section analysis of limestones from the Silurian reefal deposits of the Much Wenlock Limestone of Shropshire, England <br />
+Wed Nov 15th Rachel Wood<br />
+Carbonates contd. L - Diagenesis of carbonates in the fresh-water, marine, and deep-burial realms. <br />
+P- Thin-section analysis of diagenetic fabrics in reef limestones of Quaternary, Tertiary and Carboniferous ages. <br />
+<br />
+Wed Nov 22nd Rachel Wood<br />
+Carbonates (concluded) L - Carbonate deposition environments: processes and products of deposition of carbonate sediments in shallow tropical seas. <br />
+P - Thin-section analysis of Mesozoic shallow water tropical limestones from the Dorset coast, SW England<br />
+<br />
+Wed 22rd November 11.30-12.00 Class Practical Test (in normal practical time)
+    
+    
+</td>
+</tr>
+</table>
+
+<!-- Entry requirements (including additional costs ) -->
+<!-- don't show pre-reqs, co-reqs and prohibited combinations if called from CCAM1_A4 amend task -->
+<!-- Show Pre-requisites etc for CCAM VIEW/OCE/Course catalogue but not CCAM Amend  -->
+
+<table class="sitstablegrid">
+<caption>Entry Requirements (not applicable to Visiting Students)</caption>
+<tr>
+<td class="rowhead1" width="15%">Pre-requisites</td>
+
+<td width="35%"> Students MUST have passed:    
+<a href="cxeasc08020.htm" " target="_blank"title="View Course details. Opens in a new window.">Global Tectonics and the Rock Cycle (EASC08020)</a><span class="data1nobgred"></span> <span class="data1nobgred"></span> <br /></td>
+<td class="rowhead1" width="15%">Co-requisites</td><td width="35%"></td>
+</tr>
+<tr>
+<td class="rowhead1" width="15%">Prohibited Combinations</td><td width="35%"></td>
+
+
+<td class="rowhead1" width="15%">Other requirements</td><td width="35%"> None</td>
+</tr>
+
+<!-- show add costs for portal View Course, course catalogue and from OCE, but only if there are some -->
+
+
+</table>
+
+<!-- visting students information -FB 20110426 added High Demand Course-->
+
+<table class="sitstablegrid">
+<caption>Information for Visiting Students</caption> 
+<tr>
+<td class="rowhead1" width="15%">Pre-requisites</td><td width="85%" colspan="4">None</td>
+</tr>
+<tr>
+		<td class="rowhead1" width="15%">High Demand Course?</td>
+		<td class="data1nobg" width="85%" colspan="4">Yes</td>
+    </tr>
+</table>
+
+
+<!-- Delivery information -FB 14/1/11 added GSL_TMP5.GSL=DRPS-->
+<!-- Class times -->
+
+
+
+
+
+<table class="sitstablegrid">
+<caption>Course Delivery Information</caption>
+
+
+
+
+
+
+
+
+
+
+<!-- GSL_TMP1 = indicates whether a list of different courses' classes will be displayed. Values: Y - display course code
+at top of table, suppress additional and first class information. If blank then assume single course, so 
+don't display course code, but do display additional class and first class information.  This is so table can be used in individual MOD/MAV report or when listing a number of MODs (eg listing teaching activities for a list of SMAs)  -->
+
+<!-- GSL_TMP2 - display links to other SRLs (links won't work this from published (IPP)) N: don't, otherwise do-->
+<!-- GSL_TMP4 - Set to Y if first class and additional information to be displayed -->
+<!-- GSL_TMP5- Set to DRPS if SRL called via DRPS publish path- SRL not used for timetable and VS (uses CLASSES_TAB2)-->
+
+<!-- calling SRL must specify table, table caption (if required) eg:
+<table class="sitstablegrid">
+<caption>Course Delivery </caption> 
+---- call to this SRL ----
+</table> -->
+
+
+
+<tr><td colspan="99" style="height:5px;"></td></tr>
+<!--
+<tr><td colspan="99" style="height:5px;"> 
+ IN MAV_CLASSES_TAB </br>
+GSLTMP1:N</br>
+GSLTMP2:N </br>
+GSLTMP3: </br>
+GSLTMP4:Y </br>
+GSLTMP5:DRPS </br>
+GSLTMP6: </br>
+</td></tr>
+-->
+
+<tr>
+<td class="rowhead1" colspan="2" style="width:50%;">Academic year 2017/18, Available to all students (SV1) 
+  <!-- Quota moved from mod.course_dets cms call 882028 -->
+</td>
+<td class="rowhead1" colspan="99">Quota:&nbsp;&nbsp;None</td>
+</tr>
+
+<!-- Course start (delivery period) -->
+<tr><td class="rowhead1" width ="5%">Course Start</td>
+<td colspan="14">Semester 1</td>
+</tr>
+
+<!-- Course start date (for invoiced courses) -->
+
+
+<!-- VISITING STUDENTS : gsl_tmp6 is set up in mod.course_dets for visiting students only. setup from slp: sma_vs_r then calls mod.course_dets. Test in url_link for this gsl_tmp6  -->
+
+<!-- ayr code: 17 fixed 15 -->
+<td class="rowhead1" width="15%" target="_blank">Timetable </td>
+	<td class="data1nobg" colspan ="99">
+<a href="https://www.ted.is.ed.ac.uk/UOE1718_SWS/TIMETABLE.ASP?OBJECTCLASS=MODULE&IDENTIFIER=EASC10106_SV1_SEM1
+&STYLE=TEXTSPREADSHEET&TEMPLATE=SWSCUST+OBJECT+TEXTSPREADSHEET&WEEK=07-20" target="_blank">Timetable</a></td>
+
+
+
+
+
+
+
+
+
+<tr>
+<td class="rowhead1" style="width:15%;">Learning and Teaching activities <a href="http://www.studentsystems.is.ed.ac.uk/staff/Support/User_Guides/CCAM//Teaching_Learning.htm" target="_blank">(Further Info)</a></td>
+
+<td colspan="14"> 
+ Total Hours:
+200
+
+(
+ Lecture Hours 14,
+
+
+ Supervised Practical/Workshop/Studio Hours 42,
+ Fieldwork Hours 36,
+
+
+ Feedback/Feedforward Hours 3,
+
+
+
+
+ Programme Level Learning and Teaching Hours 4,
+
+Directed Learning and Independent Learning Hours
+101 )
+
+</td>
+</tr>
+
+<!-- Display Futher L&T Notes -->
+
+
+<!-- Display Assessment details -->
+<tr>
+<td class="rowhead1" style="width:15%;">Assessment <a href="http://www.studentsystems.is.ed.ac.uk/staff/Support/User_Guides/CCAM//Assessment_Methods.htm" target="_blank">(Further Info)</a></td>
+
+<td colspan="14"> 
+  Written Exam
+50 %,
+Coursework
+50 %,
+Practical Exam
+0 %
+</td>
+</tr>
+
+<tr>
+<tr>
+<td class="rowhead1" stlye="width:15%;">Additional Information (Assessment)</td>
+<td colspan="14">Palaeontology component of the course assessment: 50% of the mark will come from the written exam and 50% from coursework. Of this 40 % is for the report and 10% for the group presentation. <br />
+<br />
+The written exam (in a single paper with sedimentology but in two different sections) will have a choice of several essay-style questions. <br />
+<br />
+The coursework is a written report and group presentation based on one of the four fieldtrips. The course will be divided into eight groups: two for each fieldtrip site. Each individual will write a report on their group¿s site, which includes: 1) a brief background on the age, location (100 words), and importance of the site; 2) a summary of the sedimentology of the site (500 words); 3) a description of five fossils you found at the site, with a drawing or photograph for each, an identification of what the fossils are, and 50 words about major anatomical features and biological habits (800 words total). Each group will work together to prepare and a deliver a 15-minute powerpoint presentation on their site, describing its age, sedimentology, importance, major fossils, palaeoenvironment, regional geological setting and any other relevant information. Be creative! The individual reports will be handed in on that same day as the presentations (as above). <br />
+<br />
+Sedimentology component of the course assessment: <br />
+80% of the assessment will come from the written exam and 20% from the coursework (excluding the contribution to the written report and group presentation, as above).<br />
+<br />
+There will be a choice of essay-style questions in the degree exam (see above).<br />
+20% of the sedimentology mark will come from the class practical exam. This is a 20-minute test on the practical material of the sedimentological part of the course to be held in the scheduled practical class time on Wednesday 22rd November 11.30-12.00 (in normal practical time)</td>
+</tr>
+
+
+<tr>
+<td class="rowhead1" stlye="width:15%;">Feedback</td>
+<td colspan="14">Mock exam question in sedimentology to be set and marked with written feedback (choice of two questions-carbonates and cherts; discussion during fieldtrips; verbal and written feedback on the assessed group presentations after the fieldtrips.</td>
+</tr>
+
+<!--FB 11Oct10: Exam info displayed if it exists, 14/1/11:do not display stationery and comments for GSL_TMP5=DRPS-->
+
+
+<tr>
+<td class="rowhead1" colspan="99">Exam Information</td>
+</tr>
+<tr>
+    <td class="rowhead1">Exam Diet</td>
+    <td class="rowhead1" colspan="2">Paper Name</td>
+    <td class="rowhead1" >Hours & Minutes</td>
+    
+	<td class="rowhead1" colspan="11"></td>
+
+ </tr>
+<tr>
+<td class="data1nobg" nowrap="nowrap">Main Exam Diet S1 (December)</td><td colspan="2"></td><td>3:00</td><td colspan="11"></td></tr><tr>
+</tr>
+
+
+
+<!--31/1/11 FB-Teaching load display if exists-->
+
+
+
+<!--Get MABs based on MAP code on MAV
+output heading for Standard student
+SEL on sequence 001-099: <td class="data1nobg"><<DATA FIELD>></td> 
+SEL on sequence 001-099: <td class="data1nobg"><<DATA FIELD>></td> 
+SEL on sequence 001-099: <td class="data1nobg"><<DATA FIELD>></td> 
+SEL on sequence 001-099: <td class="data1nobg"><<DATA FIELD>></td> 
+SEL on sequence 001-099: <td class="data1nobg"><<DATA FIELD>></td> 
+
+output VS student heading
+select on sequence >= 101:  select on sequence >= 101:  select on sequence >= 101:  select on sequence >= 101:  select on sequence >= 101:  -->
+
+
+<!-- Learning outcomes, FB 1/4/11 add other learning outcomes for ECA -->
+<table class="sitstablegrid">
+<caption>Learning Outcomes</caption> 
+<tr>
+<td>
+    On completion of this course, the student will be able to:
+    <ol style="font-family:inherit;font-size:inherit;">
+        <li>Show a good understanding of the occurence and geological relevance of key fossil groups</li><li>Show a good understanding of key geological processes and settings involved in the formation and diagenesis of carbonate  sediments, chemical sediments and siliciclastic sediments with emphasis on practical and field context and integration with palaeontology.</li><li>Integrate aspects of palaeontology and sedimentology in the context of the geological development if the Palaeozoic of the Edinburgh area.</li>
+    </ol>
+</td>
+</tr>
+</table>
+
+<table class="sitstablegrid">
+<caption>Reading List</caption> 
+<tr><td> Palaeontology:<br />
+<br />
+1. Benton, M.J. and Harper, D.A.T, 2009, Basic Palaeontology: Introduction to Paleobiology and the fossil record, Wiley-Blackwell (this will be the main course textbook and is required reading)<br />
+<br />
+2. Clarkson, E.N.K, 2001, Invertebrate palaeontology and evolution, Wiley-Blackwell (this book will be most useful in helping to identify major fossil groups)<br />
+<br />
+3. Michael J Benton, 2014, Vetebrate Palaeontology, Wiley-Blackwell (this book is for background reading related to the vertebrate palaeontology lectures)<br />
+<br />
+4. Stephen L. Brusatte, 2012, Dinosaur Paleobiology, Wiley-Blackwell (this book is for background reading related to the vertebrate palaeontology lectures)<br />
+<br />
+Sedimentology:<br />
+Basic text-good for catch-up and basic information:<br />
+<br />
+Tucker ME, Sedimentary Petrology: An Introduction, Blackwell<br />
+<br />
+Nichols, G, Sedimentology and Stratigraphy, Blackwell (Advanced text- good for third year reference)<br />
+<br />
+Leeder MR, Sedimentology and Sedimentary Basins: from Turbulence to Tectonics, Blackwell Science<br />
+<br />
+Reading HG, Sedimentary Environments and Facies, Blackwell<br />
+<br />
+Tucker ME and Wright VP, Carbonate Sedimentology, Blackwell<br />
+</td></tr> 
+</table>
+
+<!-- CG 14/10/09 changed to show additional costs here only for CCAM amend function -->
+
+
+<table class="sitstablegrid">
+<caption>Additional Information</caption>
+
+<tr>
+<td class="rowhead1" width="15%">Graduate Attributes and Skills</td>
+<td width="85%">Not entered</td>
+</tr>
+
+
+
+<tr>
+<td class="rowhead1" width="15%">Keywords</td><td width="85%">Palaeontology,Sedimentology,Fieldwork</td>
+</tr>
+</table>
+
+<!-- Contact information -->
+<table class="sitstablegrid">
+<caption>Contacts</caption> 
+<tr>
+<td class="rowhead1"  width="15%">Course organiser</td><td width="35%">Prof Alastair Robertson<br>
+<b>Tel:</b> (0131 6)50 8546<br>
+<b>Email:</b> Alastair.Robertson@ed.ac.uk</td>
+<td class="rowhead1" width="15%">Course secretary</td><td width="35%">Miss Sarah Thomas<br>
+<b>Tel:</b> (0131 6)50 8510<br>
+<b>Email:</b> Sarah.Thomas@ed.ac.uk</td>
+</tr>  
+</table>
+
+<!-- if called from CCAM then show extra course details -->
+
+
+</td>
+<td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td bgcolor="#999999">
+
+<table width="100%" border="0" cellspacing="1" cellpadding="3">
+<tr><td bgcolor="#FFFFFF" class="subboxtitle">Navigation</td></tr>
+<tr><td bgcolor="#FFFFFF" class="subboxsection" style="white-space:nowrap">Help &amp; Information</td></tr>
+<tr><td bgcolor="#FFFFFF"><a class="subboxitem" href="../index.php">Home</a></td></tr>
+<tr><td bgcolor="#FFFFFF"><a class="subboxitem" href="../regulations/main_intro.php">Introduction</a></td></tr>
+<tr><td bgcolor="#FFFFFF"><a class="subboxitem" href="../whole_glossary.php">Glossary</a></td></tr>
+<tr><td bgcolor="#FFFFFF"><a class="subboxitem" href="cx_search.htm">Search DPTs and Courses</a></td></tr>
+<tr><td bgcolor="#FFFFFF" class="subboxsection" style="white-space:nowrap">Regulations</td></tr>
+<tr><td bgcolor="#FFFFFF"><a class="subboxitem" href="../regulations/index.php">Regulations</a></td></tr>
+<tr><td bgcolor="#FFFFFF" class="subboxsection"  style="white-space:nowrap">Degree Programmes</td></tr>
+<tr><td bgcolor="#FFFFFF"><a class="subboxitem" href="../regulations/dpt_intro.php">Introduction</a></td></tr>
+<tr><td bgcolor="#FFFFFF"><a class="subboxitem" href="drpsindex.htm">Browse&nbsp;DPTs</a></td></tr>
+<tr><td bgcolor="#FFFFFF" class="subboxsection">Courses</td></tr>
+<tr><td bgcolor="#FFFFFF"><a class="subboxitem" href="../regulations/course_intro.php">Introduction</a></td></tr>
+<tr><td bgcolor="#FFFFFF"><a class="subboxitem" href="cx_colhss.htm" style="white-space:nowrap">Humanities and Social Science</a></td></tr>
+<tr><td bgcolor="#FFFFFF"><a class="subboxitem" href="cx_colsce.htm" style="white-space:nowrap">Science and Engineering</a></td></tr>
+<tr><td bgcolor="#FFFFFF"><a class="subboxitem" href="cx_colmvm.htm" style="white-space:nowrap">Medicine and Veterinary Medicine</a></td></tr>
+<tr><td bgcolor="#FFFFFF" class="subboxsection" style="white-space:nowrap">Other Information</td></tr>
+<tr><td bgcolor="#FFFFFF"><a class="subboxitem" href="https://www.ted.is.ed.ac.uk/sws/default.aspx?context=modulebucket" target="_blank">Combined Course Timetable </a></td></tr>
+<tr><td bgcolor="#FFFFFF"><a class="subboxitem" href="http://www.ed.ac.uk/studying/" title="Prospectuses">Prospectuses</a></td></tr>
+<tr><td bgcolor="#FFFFFF"><a class="subboxitem" href="../regulations/important.php">Important&nbsp;Information</a></td></tr>
+<tr><td bgcolor="#FFFFFF" class="subboxtitle" style="height:5px;font-size:1px;">&nbsp;</td></tr>
+</table>
+
+</td></tr>
+</table></td>   
+</tr>
+</table>
+
+<div class="footer">
+  <div style="float:right">
+    <a href="http://www.ed.ac.uk/about/website/privacy">Privacy &amp; cookies</a>
+  </div>
+  <em>&copy; Copyright 2017 The University of Edinburgh -  2 February 2018 3:44 am</em>
+</div>
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  var trackingCode = window.location.hostname.substr(0, 4) === 'www.' ? 'UA-51184647-13' : 'UA-51184647-12';
+  ga('create', trackingCode, 'auto');
+  ga('send', 'pageview');
+</script>
+</body>
+</html>
