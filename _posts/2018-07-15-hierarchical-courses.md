@@ -5,7 +5,7 @@ date:   2018-07-15
 categories: python D3.js dataviz
 ---
 
-![useful image](https://s3.eu-west-2.amazonaws.com/cdacosta-londonbucket/github/easc_courses.png)
+![Subset of courses](https://s3.eu-west-2.amazonaws.com/cdacosta-londonbucket/github/easc_courses.png)
 
 [Hierarchical edge bundling](https://dx.doi.org/10.1109/TVCG.2006.147) is method for visualizing hierarchical relations between items, represented as directed graphs.
 It has been used to show call graphs from a software system, and dependencies between classes (in the object-oriented sense).
@@ -33,7 +33,7 @@ I have also created one with all courses in the Earth Sciences subject.
 </center>
 
 It looks like this:
-![All courses]({{ site.url }}/assets/easc_all_courses.gif)
+![All courses](https://s3.eu-west-2.amazonaws.com/cdacosta-londonbucket/github/easc_all_courses.gif)
 
 You can also play with it locally.
 Download **[all the codes](https://github.com/cako/blog/blob/master/codes/2018-07-15-hierarchical-courses/)**, and run a simple server on the downloaded folder with:
