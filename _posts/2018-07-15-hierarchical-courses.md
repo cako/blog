@@ -19,7 +19,7 @@ The image above was created from looking only at the courses which require or ar
 Have a play with here:
 
 <center>
-<b><a href="http://bit.ly/eascsubhrc/">Click here for an interactive display of <i>connected</i> Earth Science courses</a></b>
+<b><a href="http://bit.ly/eascsubhrc">Click here for an interactive display of <i>connected</i> Earth Science courses</a></b>
 </center>
 
 Click on the nodes to display its links.
@@ -29,7 +29,7 @@ Hover for more information, double-click to be taken to the course webpage.
 
 I have also created one with all courses in the Earth Sciences subject.
 <center>
-<b><a href="http://bit.ly/easchrc/">Click here for an interactive display of <i>all</i> Earth Science courses</a></b>
+<b><a href="http://bit.ly/easchrc">Click here for an interactive display of <i>all</i> Earth Science courses</a></b>
 </center>
 
 It looks like this:
