@@ -1,26 +1,26 @@
 <style>
 @media screen and (min-width: 42em) {
-        ul {
+    ul.header {
         display: grid;
         grid-template-columns: 1fr repeat(1, auto) 1fr;
         grid-column-gap: 5px;
         justify-items: center;
     }
 
-    li:nth-child(1) { grid-column-start: 2; }
-    li:nth-child(2) { margin-left: auto; }
+    li.header:nth-child(1) { grid-column-start: 2; }
+    li.header:nth-child(2) { margin-left: auto; }
 }
 
-ul { padding: 0; margin: 0; list-style: none; }
+ul.header { padding: 0; margin: 0; list-style: none; }
 </style>
 
 <section class="post-page-header">
-<ul>
-    <li>
+<ul class="header">
+    <li class="header">
         <h1 class="project-name"><a href="{{ site.url }}" style="color:white; text-decoration:none">{{ site.title }}</a></h1>
         <h2 class="project-tagline">{{ site.description }}</h2>
     </li>
-    <li>
+    <li class="header">
         <a href="{{ site.github }}" class="btn">View on GitHub</a>
         <br>
         <a href="{{ site.github }}/blog/tree/master/codes/{{page.date|date:"%Y-%m-%d-"}}{{codeurl}}" class="btn">Get source code</a>
