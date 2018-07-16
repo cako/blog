@@ -13,11 +13,11 @@
             <span><i class="icon-clock"></i><time datetime="{{page.date|date:"%F"}}">{{page.date|date:"%b %d, %Y"}}</time></span><br/>
             {% assign tags = '' %}
             {% for tag in page.categories %}
-                {% assign pageurl = '<a href="/categories#' | append: tag | append: '">' %}
+                {% assign pageurl = '<a href="' | append: site.baseurl | append: '/categories#' | append: tag | append: '">' %}
                 {% assign tags = tags | append: pageurl | append: tag | append: '</a>, ' %}
             {% endfor %}
             <!--<span class="category"><i class="icon-tag"></i><a href="/categories/">Tags</a>: {{ page.categories | join:', ' }}</span><br/>-->
-            <span class="category"><i class="icon-tag"></i><a href="/categories/">Tags</a>: {{ tags | split: ', ' | join: ', ' }}</span><br/>
+            <span class="category"><i class="icon-tag"></i><a href="{{ site.baseurl }}/categories/">Tags</a>: {{ tags | split: ', ' | join: ', ' }}</span><br/>
         </header>
         <br>
         <div class="entry">{{ content }}</div>
