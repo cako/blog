@@ -1,38 +1,34 @@
----
-layout: default
----
-<head>
-    <title>Carlos' blog — {{ page.title }}</title>
-    <meta charset="utf-8" />
+<!DOCTYPE html>
+<html lang="{{ site.locale }}">
+  
+  {% include head.html %}
 
-    <link rel="icon" href="https://cdacosta-londonbucket.s3.eu-west-2.amazonaws.com:443/mainsite/images/avatar.ico" type="image/x-icon" />
+  <body>
+    {% include post-header.html %}
+    <section class="main-content">
 
-    <meta property="og:title" content="Carlos' blog" />
-    <meta property="og:url" content="https://cako.github.io/" />
-    <meta property="og:type" content="website" />
-    <meta property="og:description" content="My blog"/>
-
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-107214355-2"></script>
-    <script>
-  window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-        gtag('config', 'UA-107214355-2');
-    </script>
-</head>
-
-<article>
+    <article>
         <header>
             <h1>{{ page.title }}</h1>
             <span><i class="icon-clock"></i><time datetime="{{page.date|date:"%F"}}">{{page.date|date:"%b %d, %Y"}}</time></span><br/>
-            <span class="category"><i class="icon-tag"></i><a href="/categories/">Tags</a>: {{ page.categories | join:', ' }}</span><br/>
+            {% assign tags = '' %}
+            {% for tag in page.categories %}
+                {% assign pageurl = '<a href="/categories#' | append: tag | append: '">' %}
+                {% assign tags = tags | append: pageurl | append: tag | append: '</a>, ' %}
+            {% endfor %}
+            <!--<span class="category"><i class="icon-tag"></i><a href="/categories/">Tags</a>: {{ page.categories | join:', ' }}</span><br/>-->
+            <span class="category"><i class="icon-tag"></i><a href="/categories/">Tags</a>: {{ tags | split: ', ' | join: ', ' }}</span><br/>
         </header>
         <br>
         <div class="entry">{{ content }}</div>
 
         <footer><span class="author"><i class="icon-user"></i>— <a href="https://carloscosta.heroukapp.com">{% if page.author %}{{page.author}}{% else %}{{site.author}}{% endif%}</a></span></footer>
 
-</article>
+    </article>
 
+          {% include page-footer.html %}
+
+        </section>
+
+      </body>
+</html>

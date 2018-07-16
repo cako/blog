@@ -1,0 +1,9 @@
+<section class="page-header">
+  <h1 class="project-name">{{ site.title }}</h1>
+  <h2 class="project-tagline">{{ site.description }}</h2>
+  <a href="{{ site.github }}" class="btn">View on GitHub</a>
+  {% assign codeurl = page.url | split: '/' | last %}
+  <a href="{{ site.github }}/blog/tree/master/codes/{{page.date|date:"%Y-%m-%d-"}}{{codeurl}}" class="btn">View source code</a>
+  <!--<a href="#" class="btn">Download .zip</a>-->
+  <!--<a href="#" class="btn">Download .tar.gz</a>-->
+</section>
